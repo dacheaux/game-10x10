@@ -24,19 +24,21 @@ class Square extends Component {
     modalHeading: ''
   };
 
-  toggleModal = (isWin, level) => {
-    console.log(level);
+  toggleModal = (isWin, uncheckedSquares) => {
+    if (this.props.level === 99) {
+      // this.setState()
+    }
     this.setState(prevState => {
       const modalText = isWin
         ? 'Do you want to play another level'
         : 'You have lost this level. Do you want to try again?';
       const modalHeading = isWin
-        ? `You have completed level: ${level}`
+        ? `You have completed level: ${this.props.level}`
         : 'End game';
       return { isOpen: !prevState.isOpen, modalText, modalHeading };
     });
     if (isWin) return this.props.onWin();
-    return this.props.onLose();
+    return this.props.onLose(uncheckedSquares);
   };
 
   onYesOrNo = isYes => {
@@ -52,16 +54,17 @@ class Square extends Component {
 
   onSquareClick = e => {
     const { activeSquares, litSquares, checkedSquares, coords: square } = this.props;
-    if (!utils.isContained(activeSquares, square)) return;
-    if (utils.isContained(litSquares, square)) {
+    if (!utils.isContainedIn(activeSquares, square)) return;
+    if (utils.isContainedIn(litSquares, square)) {
       let res = this.props.genLinkedSquares(square, activeSquares, checkedSquares);
       console.log('res', res);
       if (!res.linkedSquares.length) {
         console.log('!res.linkedSquares');
-        if (res.checked.length !== activeSquares.length) {
-          return this.toggleModal(false, activeSquares.length - 1);
+        const uncheckedSquares = activeSquares.length - res.checked.length;
+        if (uncheckedSquares) {
+          return this.toggleModal(false, uncheckedSquares);
         }
-        return this.toggleModal(true, activeSquares.length - 1);
+        return this.toggleModal(true, uncheckedSquares);
       }
     } else {
       return;
@@ -70,10 +73,10 @@ class Square extends Component {
 
   render() {
     const {coords: square, checkedSquares, litSquares, activeSquares, mainMenu} = this.props;
-    const checked = utils.isContained(checkedSquares, square);
-    const lit = utils.isContained(litSquares, square);
+    const checked = utils.isContainedIn(checkedSquares, square);
+    const lit = utils.isContainedIn(litSquares, square);
     const unchecked =
-      utils.isContained(activeSquares, square) && !checked && !lit;
+      utils.isContainedIn(activeSquares, square) && !checked && !lit;
     const active = !mainMenu;
     const squareClass = classNames({
       square: true,
@@ -98,8 +101,8 @@ class Square extends Component {
   }
 }
 
-function mapStateToProps({ gameLogic: { activeSquares, checkedSquares, litSquares }, gameProps: { mainMenu } }) {
-  return { activeSquares, checkedSquares, litSquares, mainMenu };
+function mapStateToProps({ gameLogic: { activeSquares, checkedSquares, litSquares }, gameProps: { mainMenu, level } }) {
+  return { activeSquares, checkedSquares, litSquares, mainMenu, level };
 }
 
 export default connect(mapStateToProps, actions)(Square);

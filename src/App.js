@@ -17,8 +17,20 @@ class App extends Component {
     console.log('App updated');
   }
 
+  state = { lives: 0 };
+
+  gameInfo() {
+    return (
+      <div>
+        Info:
+        <h4>Level: {this.props.gameProps.level}</h4>
+        <h4>Number of lives: {this.props.gameProps.lives}</h4>
+      </div>
+    );
+  }
+
   mainMenu() {
-    if (!this.props.gameProps.mainMenu) return null;
+    if (!this.props.gameProps.mainMenu) return this.gameInfo();
     return (
       <div>
         <p>
@@ -41,7 +53,7 @@ class App extends Component {
       <div className="container-fluid">
         <div className="App row">
           <div className="main">{Columns}</div>
-          <div className="info">Info {this.mainMenu()}</div>
+          <div className="info">{this.mainMenu()}</div>
         </div>
       </div>
     );

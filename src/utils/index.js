@@ -1,4 +1,4 @@
-export function isContained(superset, subset) {
+export function isContainedIn(superset, subset) {
   superset = JSON.stringify(superset);
   subset = JSON.stringify(subset);
 

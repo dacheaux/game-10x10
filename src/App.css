@@ -32,7 +32,7 @@
 }
 
 .squareHolder {
-  flex: 1 1 10%;
+  flex-grow: 1;
 }
 
 .main {

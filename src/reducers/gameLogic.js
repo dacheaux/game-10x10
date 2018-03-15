@@ -1,9 +1,7 @@
 import * as types from '../actions/types';
 import * as utils from '../utils';
 
-let initialState = { litSquares: [], checkedSquares: [], activeSquares: [] };
-// let checkedSquares;
-
+const initialState = { litSquares: [], checkedSquares: [], activeSquares: [] };
 
 export default (state = initialState, action) => {
 let checkedSquares = [],
@@ -23,7 +21,6 @@ let checkedSquares = [],
       checkedSquares.push(action.payload);
       return Object.assign({}, state, { checkedSquares, litSquares });
     case types.GEN_LINKED_SQUARES:
-      console.log(action.payload.linkedSquares);
       copyOfState = JSON.parse(JSON.stringify(state));
       checkedSquares = copyOfState.checkedSquares;
       checkedSquares.push(action.payload.square);
@@ -32,11 +29,9 @@ let checkedSquares = [],
       return Object.assign({}, state, { checkedSquares, litSquares })
     case types.GENERATE_GAME_SQUARES:
       if (!action.payload) return { activeSquares: [], litSquares: [], checkedSquares: [] }
-      let activeSquares = action.payload.activeSquares;
-      let linkedSquares = action.payload.linkedSquares;
+      const {activeSquares, linkedSquares} = action.payload;
       checkedSquares.push(activeSquares[0]);
       litSquares.push(linkedSquares);
-      console.log(litSquares, checkedSquares);
       return Object.assign({}, state, { checkedSquares, litSquares: linkedSquares, activeSquares });
     default:
       return state;

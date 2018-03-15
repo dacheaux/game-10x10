@@ -45,6 +45,15 @@ export const toMainMenu = () => dispatch => {
 export const onWin = () => dispatch => {
   console.log('You have won');
   let level = localStorage.getItem('level');
+  let lives;
+  if (level === 1) {
+    localStorage.setItem('lives', 1);
+    lives === 1;
+  } else {
+    lives = localStorage.getItem('lives');
+    lives++;
+    localStorage.setItem('lives', lives);
+  }
   if (level < 99) {
     level++;
   } else {
@@ -52,12 +61,23 @@ export const onWin = () => dispatch => {
   }
   localStorage.setItem('level', level);
   dispatch(initLevel(level));
-  dispatch({ type: types.WIN, payload: null });
+  dispatch({ type: types.LEVEL_WIN_LOSE, payload: {lives, level} });
 };
 
-export const onLose = () => dispatch => {
+export const onLose = (uncheckedSquares) => dispatch => {
   console.log('You have lost');
-  dispatch({ type: types.LOSE, payload: null });
+  let level = localStorage.getItem('level');
+  let lives;
+  if (level === 1) {
+    localStorage.setItem('lives', 0);
+    lives === 0;
+  } else {
+    lives = localStorage.getItem('lives');
+    lives = lives - uncheckedSquares;
+    if (lives < 0) lives === 0;
+    localStorage.setItem('lives', lives);
+  }
+  dispatch({ type: types.LEVEL_WIN_LOSE, payload: {lives, level} });
 };
 
 export const generateGameSquares = start => dispatch => {

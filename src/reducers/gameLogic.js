@@ -1,43 +1,43 @@
 import * as types from '../actions/types';
 import * as utils from '../utils';
 
-let initialState = { lit: [], checked: [], activeSquares: [] };
-// let checked;
+let initialState = { litSquares: [], checkedSquares: [], activeSquares: [] };
+// let checkedSquares;
 
 
 export default (state = initialState, action) => {
-let checked = [],
-  lit = [], copyOfState, index;
+let checkedSquares = [],
+  litSquares = [], copyOfState, index;
   switch (action.type) {
-    case 'LIT_SQUARE':
+    case 'litSquares_SQUARE':
       return state;
     case types.CHECK_SQUARE:
       copyOfState = JSON.parse(JSON.stringify(state));
-      checked = copyOfState.checked;
-      lit = copyOfState.lit;
-      index = utils.searchForArray(lit, action.payload);
+      checkedSquares = copyOfState.checkedSquares;
+      litSquares = copyOfState.litSquares;
+      index = utils.searchForArray(litSquares, action.payload);
       if (index > -1) {
-        lit.splice(index, 1);
+        litSquares.splice(index, 1);
       }
       console.log('State is %s and copy of state is %s', JSON.stringify(state), JSON.stringify(copyOfState));
-      checked.push(action.payload);
-      return Object.assign({}, state, { checked, lit });
+      checkedSquares.push(action.payload);
+      return Object.assign({}, state, { checkedSquares, litSquares });
     case types.GEN_LINKED_SQUARES:
       console.log(action.payload.linkedSquares);
       copyOfState = JSON.parse(JSON.stringify(state));
-      checked = copyOfState.checked;
-      checked.push(action.payload.square);
-      lit = [];
-      lit.push(action.payload.linkedSquares);
-      return Object.assign({}, state, { checked, lit })
+      checkedSquares = copyOfState.checkedSquares;
+      checkedSquares.push(action.payload.square);
+      litSquares = [];
+      litSquares.push(action.payload.linkedSquares);
+      return Object.assign({}, state, { checkedSquares, litSquares })
     case types.GENERATE_GAME_SQUARES:
-      if (!action.payload) return { activeSquares: [], lit: [], checked: [] }
+      if (!action.payload) return { activeSquares: [], litSquares: [], checkedSquares: [] }
       let activeSquares = action.payload.activeSquares;
       let linkedSquares = action.payload.linkedSquares;
-      checked.push(activeSquares[0]);
-      lit.push(linkedSquares);
-      console.log(lit, checked);
-      return Object.assign({}, state, { checked, lit: linkedSquares, activeSquares });
+      checkedSquares.push(activeSquares[0]);
+      litSquares.push(linkedSquares);
+      console.log(litSquares, checkedSquares);
+      return Object.assign({}, state, { checkedSquares, litSquares: linkedSquares, activeSquares });
     default:
       return state;
   }

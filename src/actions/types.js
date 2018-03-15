@@ -5,5 +5,5 @@ export const GEN_LINKED_SQUARES = 'GEN_LINKED_SQUARES';
 export const GAME_WON = 'GAME_WON';
 export const WIN = 'WIN';
 export const LOSE = 'LOSE';
-export const TO_MAIN_MENU = 'TO_MAIN_MENU';
+export const MAIN_MENU = 'MAIN_MENU';
 

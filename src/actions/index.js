@@ -8,6 +8,17 @@ export const initLevel = level => {
   };
 };
 
+export const showMainMenu = show => dispatch => {
+  dispatch({
+    type: types.MAIN_MENU,
+    payload: show
+  });
+  dispatch({
+    type: types.GENERATE_GAME_SQUARES,
+    payload: null
+  });
+};
+
 export const checkSquare = square => {
   return {
     type: types.CHECK_SQUARE,
@@ -26,7 +37,7 @@ export const nextLevel = () => dispatch => {
 export const toMainMenu = () => dispatch => {
   console.log('toMainMenu');
   dispatch({
-    type: types.TO_MAIN_MENU,
+    type: types.MAIN_MENU,
     payload: null
   });
 };
@@ -41,13 +52,13 @@ export const onWin = () => dispatch => {
   }
   localStorage.setItem('level', level);
   dispatch(initLevel(level));
-  dispatch({ type: types.WIN, payload: null })
-}
+  dispatch({ type: types.WIN, payload: null });
+};
 
 export const onLose = () => dispatch => {
   console.log('You have lost');
-  dispatch({ type: types.LOSE, payload: null })
-}
+  dispatch({ type: types.LOSE, payload: null });
+};
 
 export const generateGameSquares = start => dispatch => {
   const level = localStorage.getItem('level');

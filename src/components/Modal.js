@@ -27,9 +27,8 @@ class Modal extends Component {
 
     return (
       <div className="backdrop" style={backdropStyle}>
-        <div className="modal" style={modalStyle}>
+        <div className="modalDialog" style={modalStyle}>
           {this.props.children}
-
           <div className="footer">
             <button onClick={e => this.props.onBtnClick(false)}>
               No

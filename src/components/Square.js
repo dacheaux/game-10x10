@@ -42,7 +42,7 @@ class Square extends Component {
   onYesOrNo = isYes => {
     this.setState(prevState => {return { isOpen: !prevState.isOpen }});
     if (isYes) return this.props.nextLevel();
-    return this.props.toMainMenu();   
+    return this.props.showMainMenu(true);   
   };
 
   generateGameSquares = () => {
@@ -51,10 +51,10 @@ class Square extends Component {
   };
 
   onSquareClick = e => {
-    const { activeSquares, lit, checked, coords } = this.props;
-    if (!utils.isContained(activeSquares, coords)) return;
-    if (utils.isContained(lit, coords)) {
-      let res = this.props.genLinkedSquares(coords, activeSquares, checked);
+    const { activeSquares, litSquares, checkedSquares, coords: square } = this.props;
+    if (!utils.isContained(activeSquares, square)) return;
+    if (utils.isContained(litSquares, square)) {
+      let res = this.props.genLinkedSquares(square, activeSquares, checkedSquares);
       console.log('res', res);
       if (!res.linkedSquares.length) {
         console.log('!res.linkedSquares');
@@ -69,23 +69,25 @@ class Square extends Component {
   };
 
   render() {
-    const square = this.props.coords;
-    let checked = utils.isContained(this.props.checked, square);
-    let lit = utils.isContained(this.props.lit, square);
-    let unchecked =
-      utils.isContained(this.props.activeSquares, square) && !checked && !lit;
-    let squareClass = classNames({
+    const {coords: square, checkedSquares, litSquares, activeSquares, mainMenu} = this.props;
+    const checked = utils.isContained(checkedSquares, square);
+    const lit = utils.isContained(litSquares, square);
+    const unchecked =
+      utils.isContained(activeSquares, square) && !checked && !lit;
+    const active = !mainMenu;
+    const squareClass = classNames({
       square: true,
+      active,
       unchecked,
       lit,
       checked
     });
     // console.log(this.props.lit);
-    let onSquareClick = !this.props.activeSquares.length
+    const onSquareClick = !mainMenu && !activeSquares.length
       ? this.generateGameSquares
       : this.onSquareClick;
     return (
-      <div>
+      <div className="squareHolder">
         <div className={squareClass} onClick={onSquareClick} />
         <Modal show={this.state.isOpen} onBtnClick={this.onYesOrNo}>
           <h3>{this.state.modalHeading}</h3>
@@ -96,9 +98,8 @@ class Square extends Component {
   }
 }
 
-function mapStateToProps({ gameLogic: { activeSquares, checked, lit } }) {
-  // console.log(activeSquares, checked, lit);
-  return { activeSquares, checked, lit };
+function mapStateToProps({ gameLogic: { activeSquares, checkedSquares, litSquares }, gameProps: { mainMenu } }) {
+  return { activeSquares, checkedSquares, litSquares, mainMenu };
 }
 
 export default connect(mapStateToProps, actions)(Square);

@@ -1,10 +1,10 @@
 import * as types from './types';
 import * as utils from '../utils';
 
-export const initLevel = level => {
+export const initLevel = (level, lives) => {
   return {
     type: types.INIT_LEVEL,
-    payload: level
+    payload: { level, lives }
   };
 };
 
@@ -14,7 +14,7 @@ export const showMainMenu = show => dispatch => {
     payload: show
   });
   dispatch({
-    type: types.GENERATE_GAME_SQUARES,
+    type: types.GENERATE_LEVEL_SQUARES,
     payload: null
   });
 };
@@ -29,7 +29,7 @@ export const checkSquare = square => {
 export const nextLevel = () => dispatch => {
   console.log('nextLevel');
   dispatch({
-    type: types.GENERATE_GAME_SQUARES,
+    type: types.GENERATE_LEVEL_SQUARES,
     payload: null
   });
 };
@@ -47,21 +47,20 @@ export const onWin = () => dispatch => {
   let level = localStorage.getItem('level');
   let lives;
   if (level === 1) {
-    localStorage.setItem('lives', 1);
-    lives === 1;
+    lives = 1;
   } else {
     lives = localStorage.getItem('lives');
     lives++;
-    localStorage.setItem('lives', lives);
   }
   if (level < 99) {
     level++;
   } else {
     level = 1;
   }
+  localStorage.setItem('lives', lives);
   localStorage.setItem('level', level);
-  dispatch(initLevel(level));
-  dispatch({ type: types.LEVEL_WIN_LOSE, payload: {lives, level} });
+  dispatch({ type: types.GENERATE_LEVEL_SQUARES, payload: {stopTimer: true} })
+  dispatch(initLevel(level, lives));
 };
 
 export const onLose = (uncheckedSquares) => dispatch => {
@@ -69,26 +68,32 @@ export const onLose = (uncheckedSquares) => dispatch => {
   let level = localStorage.getItem('level');
   let lives;
   if (level === 1) {
-    localStorage.setItem('lives', 0);
-    lives === 0;
+    lives = 0;
   } else {
     lives = localStorage.getItem('lives');
     lives = lives - uncheckedSquares;
-    if (lives < 0) lives === 0;
-    localStorage.setItem('lives', lives);
+    if (lives < 0 || lives === 0) {
+      console.log('lives < 0', lives);
+      lives = 0;
+      level = 1;
+    };
   }
-  dispatch({ type: types.LEVEL_WIN_LOSE, payload: {lives, level} });
+  localStorage.setItem('level', level);
+  localStorage.setItem('lives', lives);
+  console.log('lives ++', lives);
+  dispatch({ type: types.GENERATE_LEVEL_SQUARES, payload: {stopTimer: true} })
+  dispatch(initLevel(level, lives));
 };
 
-export const generateGameSquares = start => dispatch => {
+export const generateLevelSquares = start => dispatch => {
   const level = localStorage.getItem('level');
-  let activeSquares = [start];
+  let levelSquares = [start];
   let nextSquare,
     current = start;
   for (let i = 0; i < level; i++) {
-    nextSquare = genNextSquare(current, activeSquares);
+    nextSquare = genNextSquare(current, levelSquares);
     current = nextSquare;
-    activeSquares.push(nextSquare);
+    levelSquares.push(nextSquare);
   }
   let linkedSquares = [].concat(
     genHorizontalSquares(start),
@@ -96,18 +101,18 @@ export const generateGameSquares = start => dispatch => {
     genDiagonalSquares(start)
   );
   linkedSquares = linkedSquares.filter(s => {
-    return utils.searchForArray(activeSquares, s) > -1;
+    return utils.searchForArray(levelSquares, s) > -1;
   });
-  console.log(activeSquares);
+  console.log(levelSquares);
   dispatch({
-    type: types.GENERATE_GAME_SQUARES,
-    payload: { activeSquares, linkedSquares }
+    type: types.GENERATE_LEVEL_SQUARES,
+    payload: { levelSquares, linkedSquares }
   });
 };
 
 export const genLinkedSquares = (
   square,
-  activeSquares,
+  levelSquares,
   checked
 ) => dispatch => {
   let linkedSquares = [].concat(
@@ -117,7 +122,7 @@ export const genLinkedSquares = (
   );
   linkedSquares = linkedSquares.filter(s => {
     return (
-      utils.searchForArray(activeSquares, s) > -1 &&
+      utils.searchForArray(levelSquares, s) > -1 &&
       !(utils.searchForArray(checked, s) > -1)
     );
   });
@@ -130,14 +135,14 @@ export const genLinkedSquares = (
   return { linkedSquares, checked };
 };
 
-function genNextSquare(current, activeSquares) {
+function genNextSquare(current, levelSquares) {
   let linkedSquares = [].concat(
     genHorizontalSquares(current),
     genVerticalSquares(current),
     genDiagonalSquares(current)
   );
   linkedSquares = linkedSquares.filter(s => {
-    return !(utils.searchForArray(activeSquares, s) > -1);
+    return !(utils.searchForArray(levelSquares, s) > -1);
   });
   return linkedSquares[Math.floor(Math.random() * linkedSquares.length)];
 }

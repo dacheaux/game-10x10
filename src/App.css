@@ -1,0 +1,22 @@
+.square {
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid;
+  background-color: #EFEFEF;
+}
+
+.row-field {
+  display: flex;
+}
+
+.lit {
+  background-color: #D0D765;
+}
+
+.checked {
+  background-color: #276B68;
+}
+
+.unchecked {
+  background-color: #696D32;
+}

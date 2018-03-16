@@ -1,6 +1,7 @@
-export const CHECK_SQUARE = 'CHECK_SQUARE';
+export const MAIN_MENU = 'MAIN_MENU';
+export const SELECT_PLAYER = 'SELECT_PLAYER';
 export const INIT_LEVEL = 'INIT_LEVEL';
 export const GENERATE_LEVEL_SQUARES = 'GENERATE_LEVEL_SQUARES';
 export const GEN_LINKED_SQUARES = 'GEN_LINKED_SQUARES';
+export const CHECK_SQUARE = 'CHECK_SQUARE';
 export const GAME_WON = 'GAME_WON';
-export const MAIN_MENU = 'MAIN_MENU';

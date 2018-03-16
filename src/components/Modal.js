@@ -30,10 +30,10 @@ class Modal extends Component {
         <div className="modalDialog" style={modalStyle}>
           {this.props.children}
           <div className="footer">
-            <button onClick={e => this.props.onBtnClick(false)}>
+            <button onClick={e => this.props.yesOrNo(false)}>
               No
             </button>
-            <button onClick={e => this.props.onBtnClick(true)} style={{marginLeft: 20}}>
+            <button onClick={e => this.props.yesOrNo(true)} style={{marginLeft: 20}}>
               Yes
             </button>
           </div>

@@ -46,7 +46,7 @@ class Square extends Component {
       return { isModalOpen: !prevState.isModalOpen };
     });
     if (isYes) return this.props.nextLevel();
-    return this.props.showMainMenu(true);
+    return this.props.startGame(false);
   };
 
   generateLevelSquares = () => {
@@ -110,7 +110,7 @@ class Square extends Component {
     return (
       <div className="squareHolder">
         <div className={squareClass} onClick={onSquareClick} />
-        <Modal show={this.state.isModalOpen} onBtnClick={this.onYesOrNo}>
+        <Modal show={this.state.isModalOpen} yesOrNo={this.onYesOrNo}>
           <h3>{this.state.modalHeading}</h3>
           <p>{this.state.modalText}</p>
           <div style={{padding: '1%'}}>

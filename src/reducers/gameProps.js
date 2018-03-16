@@ -1,11 +1,14 @@
 import * as types from '../actions/types';
 
 const initialState = {
-  name: '',
-  level: 1,
-  lives: 0,
-  timesCompleted: {},
   players: [],
+  player: {
+    name: '',
+    level: 1,
+    lives: 0,
+    scores: {}
+  },
+  level: 1,
   mainMenu: true
 };
 
@@ -14,9 +17,7 @@ export default (state = initialState, action) => {
     case types.MAIN_MENU:
       return Object.assign({}, state, { mainMenu: action.payload });
     case types.SELECT_PLAYER:
-      const players = JSON.parse(JSON.stringify(state.players));
-      players.push(action.payload);
-      return Object.assign({}, state, { ...action.payload }, { players });
+      return Object.assign({}, state, { ...action.payload });
     case types.INIT_LEVEL:
       return Object.assign({}, state, { ...action.payload });
     case types.GAME_WON:

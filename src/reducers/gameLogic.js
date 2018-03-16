@@ -1,7 +1,7 @@
 import * as types from '../actions/types';
 import * as utils from '../utils';
 
-const initialState = { litSquares: [], checkedSquares: [], levelSquares: [], timer: false };
+const initialState = { litSquares: [], checkedSquares: [], levelSquares: [], timer: false, elapsedTime: 0 };
 
 export default (state = initialState, action) => {
   let checkedSquares = [],

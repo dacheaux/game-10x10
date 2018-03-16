@@ -1,3 +1,32 @@
+export function fetchPlayer(playerName) {
+  let player = JSON.parse(localStorage.getItem('player'));
+  let players = JSON.parse(localStorage.getItem('players')) || [];
+  console.log('playerName', playerName);
+  console.log(player);
+  const noPlayer = !Boolean(player);
+  const newPlayer = {
+    level: 1,
+    lives: 0,
+    scores: {}
+  };
+  if (noPlayer) {
+    player = newPlayer;
+    player.name = 'anonPlayer';
+    players.push(player);
+  } else if (player.name !== playerName) {
+    player = players.filter(player => player.name === playerName)[0];
+    console.log('player from fetchPlayer', player);
+    if (!player) {
+      player = newPlayer;
+      player.name = playerName;
+      players.push(player);
+    }
+  }
+  localStorage.setItem('player', JSON.stringify(player));
+  localStorage.setItem('players', JSON.stringify(players));
+  return { player, players };
+}
+
 export function isContainedIn(superset, subset) {
   superset = JSON.stringify(superset);
   subset = JSON.stringify(subset);
@@ -77,4 +106,3 @@ export function flatten(arr) {
 export function genRandomNum(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
-

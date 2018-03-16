@@ -4,39 +4,29 @@ import { Field, reduxForm } from 'redux-form';
 
 import GameStats from './GameStats';
 import ChoosePlayer from './ChoosePlayer';
+
 import * as actions from '../actions';
+import * as utils from '../utils';
 
 class MainMenu extends Component {
-  state = { isModalOpen: false }
+  state = { isModalOpen: false };
 
   componentDidMount() {
-    const playerName = localStorage.getItem('playerName') || 'anonPlayer';
-    const players = JSON.parse(localStorage.getItem('players')) || [
-      {
-        name: 'anonPlayer',
-        level: parseInt(localStorage.getItem('level')) || 1,
-        lives: parseInt(localStorage.getItem('lives')) || 0,
-        timesCompleted: JSON.parse(localStorage.getItem('timesCompleted')) || {}
-      }
-    ];
-    const player = players.filter(player => player.name === playerName)[0];
+    const fetched = utils.fetchPlayer('anonPlayer');
+    console.log('fetched', fetched);
     this.props.startGame(false);
-    this.props.selectPlayer(player);
+    this.props.selectPlayer(fetched.player, fetched.players);
     console.log('componentDidMount');
   }
 
   onSelectLevel = values => {
-    const level =
-      values.quantity || parseInt(localStorage.getItem('level')) || 1;
-    localStorage.setItem('level', level);
-    const lives = parseInt(localStorage.getItem('lives')) || 0;
-    localStorage.setItem('lives', lives);
-    this.props.initLevel(level, lives);
+    const { player, players } = this.props.gameProps;
+    this.props.initLevel(player, players);
     this.props.startGame(true);
     console.log('onSelectLevel', values);
   };
 
-  choosePlayer = () => {
+  onCloseModal = () => {
     this.setState(prevState => {
       return { isModalOpen: !prevState.isModalOpen };
     });
@@ -50,7 +40,7 @@ class MainMenu extends Component {
       <div>
         <button
           className="btn btn-primary create-new"
-          onClick={this.choosePlayer}
+          onClick={this.onCloseModal}
         >
           Create new player
         </button>
@@ -71,7 +61,7 @@ class MainMenu extends Component {
           </p>
         </form>
         <p>High scores</p>
-        <ChoosePlayer show={this.state.isModalOpen} />
+        <ChoosePlayer show={this.state.isModalOpen} closeModal={this.onCloseModal} />
       </div>
     );
   }

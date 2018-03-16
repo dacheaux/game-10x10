@@ -1,10 +1,10 @@
 import * as types from './types';
 import * as utils from '../utils';
 
-export const initLevel = (level, lives) => {
+export const initLevel = (player, players) => {
   return {
     type: types.INIT_LEVEL,
-    payload: { level, lives }
+    payload: {player, players}
   };
 };
 
@@ -42,66 +42,31 @@ export const toMainMenu = () => dispatch => {
   });
 };
 
-export const onWin = () => dispatch => {
+export const onWin = (player, players) => dispatch => {
   console.log('You have won');
-  let level = localStorage.getItem('level');
-  let lives;
-  let timesCompleted = localStorage.getItem('timesCompleted');
-
-  if (level === 1) {
-    lives = 1;
-  } else {
-    lives = localStorage.getItem('lives');
-    lives++;
-  }
-  if (level < 99) {
-    level++;
-  } else {
-    level = 1;
-  }
-  localStorage.setItem('lives', lives);
-  localStorage.setItem('level', level);
-  localStorage.setItem('timesCompleted', timesCompleted);
   dispatch({ type: types.GENERATE_LEVEL_SQUARES, payload: {stopTimer: true} })
-  dispatch(initLevel(level, lives));
+  dispatch(initLevel(player, players));
 };
 
-export const onLose = (uncheckedSquares) => dispatch => {
+export const onLose = (player, players) => dispatch => {
   console.log('You have lost');
-  let level = localStorage.getItem('level');
-  let lives;
-  if (level === 1) {
-    lives = 0;
-  } else {
-    lives = localStorage.getItem('lives');
-    lives = lives - uncheckedSquares;
-    if (lives < 0 || lives === 0) {
-      console.log('lives < 0', lives);
-      lives = 0;
-      level = 1;
-    };
-  }
-  localStorage.setItem('level', level);
-  localStorage.setItem('lives', lives);
-  console.log('lives ++', lives);
   dispatch({ type: types.GENERATE_LEVEL_SQUARES, payload: {stopTimer: true} })
-  dispatch(initLevel(level, lives));
+  dispatch(initLevel(player, players));
 };
 
-export const generateLevelSquares = start => dispatch => {
-  const level = localStorage.getItem('level');
-  let levelSquares = [start];
+export const generateLevelSquares = (startSquare, level) => dispatch => {
+  let levelSquares = [startSquare];
   let nextSquare,
-    current = start;
+    current = startSquare;
   for (let i = 0; i < level; i++) {
     nextSquare = utils.genNextSquare(current, levelSquares);
     current = nextSquare;
     levelSquares.push(nextSquare);
   }
   let linkedSquares = [].concat(
-    utils.genHorizontalSquares(start),
-    utils.genVerticalSquares(start),
-    utils.genDiagonalSquares(start)
+    utils.genHorizontalSquares(startSquare),
+    utils.genVerticalSquares(startSquare),
+    utils.genDiagonalSquares(startSquare)
   );
   linkedSquares = linkedSquares.filter(s => {
     return utils.searchForArray(levelSquares, s) > -1;
@@ -138,9 +103,9 @@ export const genLinkedSquares = (
   return { linkedSquares, checked };
 };
 
-export const selectPlayer = player => {
+export const selectPlayer = (player, players) => {
   return {
     type: types.SELECT_PLAYER,
-    payload: player
+    payload: {player, players}
   }
 }

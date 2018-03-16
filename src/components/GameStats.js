@@ -34,6 +34,7 @@ class GameStats extends Component {
 
   render() {
     const { levelSquares, checkedSquares, timer } = this.props.gameLogic;
+    const { level, lives } = this.props.gameProps.player;
     return (
       <div>
         Info:
@@ -41,8 +42,8 @@ class GameStats extends Component {
         <h4>
           Fields left to click: {levelSquares.length - checkedSquares.length}
         </h4>
-        <h4>Level: {this.props.gameProps.level}</h4>
-        <h4>Number of lives: {this.props.gameProps.lives}</h4>
+        <h4>Level: {level}</h4>
+        <h4>Number of lives: {lives}</h4>
       </div>
     );
   }

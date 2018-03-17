@@ -1,8 +1,3 @@
-.App {
-  align-items: center;
-  height: 85vh;
-}
-
 .square {
   padding-top: 100%;
   border: 1px solid;
@@ -34,8 +29,7 @@
 }
 
 .main {
-  width: 85vh;
-  padding: 0 1.5rem;
+  max-width: 85vh;
 }
 
 .info {
@@ -44,8 +38,7 @@
 
 .menu {
   display: flex;
-  width: 85vh;
-  padding: 0 1.5rem;
+  max-width: 85vh;
 }
 
 .menu-top {

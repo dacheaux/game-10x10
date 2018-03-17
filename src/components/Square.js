@@ -104,18 +104,6 @@ class Square extends Component {
         <LevelEnd show={this.state.isModalOpen} yesOrNo={this.onYesOrNo}>
           <h3>{this.state.modalHeading}</h3>
           <p>{this.state.modalText}</p>
-          <div style={{ padding: '1%' }}>
-            <form>
-              Choose level (between 1 and 99):
-              <input
-                type="number"
-                name="quantity"
-                min="1"
-                max="99"
-                value={this.state.chosenLevel}
-              />
-            </form>
-          </div>
         </LevelEnd>
       </div>
     );

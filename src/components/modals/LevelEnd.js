@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
-class Modal extends Component {
-  render() {
-    if(!this.props.show) {
+export default (props) => {
+    if(!props.show) {
       return null;
     }
 
@@ -28,19 +27,16 @@ class Modal extends Component {
     return (
       <div className="backdrop" style={backdropStyle}>
         <div className="modalDialog" style={modalStyle}>
-          {this.props.children}
+          {props.children}
           <div className="footer">
-            <button onClick={e => this.props.yesOrNo(false)}>
+            <button onClick={e => props.yesOrNo(false)}>
               No
             </button>
-            <button onClick={e => this.props.yesOrNo(true)} style={{marginLeft: 20}}>
+            <button onClick={e => props.yesOrNo(true)} style={{marginLeft: 20}}>
               Yes
             </button>
           </div>
         </div>
       </div>
     );
-  }
 }
-
-export default Modal;

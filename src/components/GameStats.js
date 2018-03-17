@@ -18,10 +18,9 @@ class GameStats extends Component {
     }
   }
 
-  saveUserScore = (elapsedTime) => {
-    console.log('elapsedTime', elapsedTime);
+  saveUserScore = elapsedTime => {
     const players = this.props.gameProps.users;
-  }
+  };
 
   state = { elapsedTime: 0 };
 
@@ -36,12 +35,15 @@ class GameStats extends Component {
     const { gameProps } = this.props;
     return (
       <div className="row menu">
-        <h6 className="col-3">Elapsed time: {this.state.elapsedTime}</h6>
-        <h6 className="col-3">
-          Fields left to click: {levelSquares.length - checkedSquares.length}
-        </h6>
-        <h6 className="col-3">Level: {gameProps.level}</h6>
-        <h6 className="col-3">Number of lives: {gameProps.player.lives}</h6>
+        <h5 className="col-auto text-danger">Game Stats</h5>
+        <div className="col-9 row">
+          <h6 className="col-3">Timer: {this.state.elapsedTime}</h6>
+          <h6 className="col-3">
+            Left to click: {levelSquares.length - checkedSquares.length}
+          </h6>
+          <h6 className="col-3">Lives: {gameProps.player.lives}</h6>
+          <h6 className="col-3">Level: {gameProps.level}</h6>
+        </div>
       </div>
     );
   }
@@ -51,4 +53,4 @@ function mapStateToProps({ gameProps, gameLogic }) {
   return { gameProps, gameLogic };
 }
 
-export default connect(mapStateToProps, actions)(GameStats)
+export default connect(mapStateToProps, actions)(GameStats);

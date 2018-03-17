@@ -1,25 +1,22 @@
 import React, { Component } from 'react';
 
-import Row from './components/Row';
-import MainMenu from './components/MainMenu';
+import Menu from './components/Menu';
+import Rows from './components/Rows';
 import GameStats from './components/GameStats';
 import './App.css';
 
 class App extends Component {
   render() {
-    const Rows = [];
-    for (let i = 1; i <= 10; i++) {
-      Rows.push(<Row rowNum={i} key={i} />);
-    }
-
     return (
       <div className="container-fluid">
-        <MainMenu />
-        <div className="App row">
-          <div className="main">{Rows}</div>
-          <div className="info">Here be charts</div>
+        <div className="row">
+          <div className="col-md-7">
+            <Menu />
+            <Rows />
+            <GameStats />
+          </div>
+          <div className="col-md-5 info">Here be charts</div>
         </div>
-        <GameStats />
       </div>
     );
   }

@@ -6,7 +6,7 @@ import ChoosePlayer from './modals/ChoosePlayer';
 import * as actions from '../actions';
 import * as utils from '../utils';
 
-class MainMenu extends Component {
+class Menu extends Component {
   state = { isModalOpen: false };
 
   componentDidMount() {
@@ -31,7 +31,7 @@ class MainMenu extends Component {
     const { gameProps } = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props;
     return (
-      <div className="row menu menu-top">
+      <div className="menu menu-top">
         <div className="col-8 p-0 d-flex">
           <button className="btn btn-primary btn-sm" onClick={this.toggleModal}>
             New player
@@ -75,4 +75,4 @@ function mapStateToProps({ gameProps }) {
 
 export default reduxForm({
   form: 'selectLevel'
-})(connect(mapStateToProps, actions)(MainMenu));
+})(connect(mapStateToProps, actions)(Menu));

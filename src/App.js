@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Row from './components/Row';
 import MainMenu from './components/MainMenu';
+import GameStats from './components/GameStats';
 import './App.css';
 
 class App extends Component {
@@ -13,10 +14,12 @@ class App extends Component {
 
     return (
       <div className="container-fluid">
+        <MainMenu />
         <div className="App row">
           <div className="main">{Rows}</div>
-          <div className="info"><MainMenu /></div>
+          <div className="info">Here be charts</div>
         </div>
+        <GameStats />
       </div>
     );
   }

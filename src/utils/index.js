@@ -1,8 +1,6 @@
 export function fetchPlayer(playerName) {
   let player = JSON.parse(localStorage.getItem('player'));
   let players = JSON.parse(localStorage.getItem('players')) || [];
-  console.log('playerName', playerName);
-  console.log(player);
   const noPlayer = !Boolean(player);
   const newPlayer = {
     level: 1,
@@ -15,7 +13,6 @@ export function fetchPlayer(playerName) {
     players.push(player);
   } else if (player.name !== playerName) {
     player = players.filter(player => player.name === playerName)[0];
-    console.log('player from fetchPlayer', player);
     if (!player) {
       player = newPlayer;
       player.name = playerName;
@@ -97,10 +94,6 @@ export function genDiagonalSquares(current) {
     s => s[0] > 0 && s[1] > 0 && (s[0] < 11 && s[1] < 11)
   );
   return res;
-}
-
-export function flatten(arr) {
-  return [].concat(...arr);
 }
 
 export function genRandomNum(min, max) {

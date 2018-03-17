@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 
-import GameStats from './GameStats';
-import ChoosePlayer from './ChoosePlayer';
-
+import ChoosePlayer from './modals/ChoosePlayer';
 import * as actions from '../actions';
 import * as utils from '../utils';
 
@@ -13,62 +11,66 @@ class MainMenu extends Component {
 
   componentDidMount() {
     const fetched = utils.fetchPlayer('anonPlayer');
-    console.log('fetched', fetched);
     this.props.startGame(false);
     this.props.selectPlayer(fetched.player, fetched.players);
-    console.log('componentDidMount');
   }
 
-  onSelectLevel = values => {
+  onSelectLevel = ({ level }) => {
     const { player, players } = this.props.gameProps;
-    this.props.initLevel(player, players);
+    this.props.initLevel(parseInt(level) || player.level);
     this.props.startGame(true);
-    console.log('onSelectLevel', values);
   };
 
-  onCloseModal = () => {
+  toggleModal = () => {
     this.setState(prevState => {
       return { isModalOpen: !prevState.isModalOpen };
     });
   };
 
   render() {
-    const { gameProps, gameLogic } = this.props;
+    const { gameProps } = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props;
-    if (!gameProps.mainMenu) return <GameStats />;
     return (
-      <div>
-        <button
-          className="btn btn-primary create-new"
-          onClick={this.onCloseModal}
-        >
-          Create new player
-        </button>
-        <form onSubmit={handleSubmit(this.onSelectLevel)}>
-          <label htmlFor="quantity">Choose level: </label>
-          <Field
-            type="number"
-            name="quantity"
-            id="quantity"
-            component="input"
-            min="1"
-            max={gameProps.level}
-          />
-          <p>
-            <button type="submit">
-              {gameProps.level !== 1 ? 'Continue playing' : 'Start new'}
+      <div className="row menu menu-top">
+        <div className="col-8 p-0 d-flex">
+          <button className="btn btn-primary btn-sm" onClick={this.toggleModal}>
+            New player
+          </button>
+          <form
+            className="form-inline"
+            onSubmit={handleSubmit(this.onSelectLevel)}
+          >
+            <div className="form-group mx-4">
+              <label htmlFor="level" className="col-8 p-0">Choose level: </label>
+              <Field
+                type="number"
+                name="level"
+                className="form-control col-4 p-1"
+                id="level"
+                component="input"
+                min="1"
+                max={gameProps.player.level}
+              />
+            </div>
+            <button type="submit" className="btn btn-secondary btn-sm">
+              Start game
             </button>
-          </p>
-        </form>
-        <p>High scores</p>
-        <ChoosePlayer show={this.state.isModalOpen} closeModal={this.onCloseModal} />
+          </form>
+        </div>
+        <div className="col-4 p-0 d-flex align-items-center justify-content-end">
+          Hello, {gameProps.player.name}
+        </div>
+        <ChoosePlayer
+          show={this.state.isModalOpen}
+          toggleModal={this.toggleModal}
+        />
       </div>
     );
   }
 }
 
-function mapStateToProps({ gameProps, gameLogic }) {
-  return { gameProps, gameLogic };
+function mapStateToProps({ gameProps }) {
+  return { gameProps };
 }
 
 export default reduxForm({

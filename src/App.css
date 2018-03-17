@@ -1,7 +1,6 @@
 .App {
-  display: flex;
   align-items: center;
-  height: 95vh;
+  height: 85vh;
 }
 
 .square {
@@ -16,7 +15,6 @@
 
 .row-field {
   display: flex;
-  padding: 0 2%;
 }
 
 .lit {
@@ -37,9 +35,19 @@
 
 .main {
   width: 85vh;
-  padding: 0 1%;
+  padding: 0 1.5rem;
 }
 
 .info {
   flex-grow: 1;
+}
+
+.menu {
+  display: flex;
+  width: 85vh;
+  padding: 0 1.5rem;
+}
+
+.menu-top {
+  margin-top: 1rem;
 }

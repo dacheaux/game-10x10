@@ -5,7 +5,6 @@ import * as actions from '../actions';
 
 class GameStats extends Component {
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps);
     const { level, timesCompleted } = this.props.gameProps;
     if (
       nextProps.gameLogic.timer &&
@@ -34,16 +33,15 @@ class GameStats extends Component {
 
   render() {
     const { levelSquares, checkedSquares, timer } = this.props.gameLogic;
-    const { level, lives } = this.props.gameProps.player;
+    const { gameProps } = this.props;
     return (
-      <div>
-        Info:
-        <h4>Elapsed time: {this.state.elapsedTime}</h4>
-        <h4>
+      <div className="row menu">
+        <h6 className="col-3">Elapsed time: {this.state.elapsedTime}</h6>
+        <h6 className="col-3">
           Fields left to click: {levelSquares.length - checkedSquares.length}
-        </h4>
-        <h4>Level: {level}</h4>
-        <h4>Number of lives: {lives}</h4>
+        </h6>
+        <h6 className="col-3">Level: {gameProps.level}</h6>
+        <h6 className="col-3">Number of lives: {gameProps.player.lives}</h6>
       </div>
     );
   }

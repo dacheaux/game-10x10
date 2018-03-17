@@ -9,14 +9,17 @@ const initialState = {
     scores: {}
   },
   level: 1,
-  mainMenu: true
+  levelIsComplete: false,
+  start: false
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.MAIN_MENU:
-      return Object.assign({}, state, { mainMenu: action.payload });
+    case types.START_GAME:
+      return Object.assign({}, state, { ...action.payload });
     case types.SELECT_PLAYER:
+      return Object.assign({}, state, { ...action.payload });
+    case types.SAVE_PLAYER:
       return Object.assign({}, state, { ...action.payload });
     case types.INIT_LEVEL:
       return Object.assign({}, state, { ...action.payload });

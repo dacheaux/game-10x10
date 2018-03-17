@@ -1,57 +1,56 @@
 import * as types from './types';
 import * as utils from '../utils';
 
-export const initLevel = (player, players) => {
+export const initLevel = level => {
   return {
     type: types.INIT_LEVEL,
+    payload: {level}
+  };
+};
+
+export const selectPlayer = (player, players) => {
+  return {
+    type: types.SELECT_PLAYER,
+    payload: {player, players}
+  }
+}
+
+export const startGame = start => dispatch => {
+  dispatch({
+    type: types.START_GAME,
+    payload: {start}
+  });
+  dispatch({
+    type: types.GENERATE_LEVEL_SQUARES,
+    payload: null
+  });
+};
+
+export const onWin = (level, player, players) => dispatch => {
+  dispatch(initLevel(level));
+  dispatch({ type: types.GENERATE_LEVEL_SQUARES, payload: {stopTimer: true} })
+  dispatch(savePlayer(player, players));
+};
+
+export const onLose = (level, player, players) => dispatch => {
+  dispatch(initLevel(level));
+  dispatch({ type: types.GENERATE_LEVEL_SQUARES, payload: {stopTimer: true} })
+  dispatch(savePlayer(player, players));
+};
+
+export const savePlayer = (player, players) => {
+  return {
+    type: types.SAVE_PLAYER,
     payload: {player, players}
   };
 };
 
-export const startGame = show => dispatch => {
-  dispatch({
-    type: types.MAIN_MENU,
-    payload: !show
-  });
+export const nextLevel = (level) => dispatch => {
+  dispatch(initLevel(level));
   dispatch({
     type: types.GENERATE_LEVEL_SQUARES,
     payload: null
   });
-};
-
-export const checkSquare = square => {
-  return {
-    type: types.CHECK_SQUARE,
-    payload: square
-  };
-};
-
-export const nextLevel = () => dispatch => {
-  console.log('nextLevel');
-  dispatch({
-    type: types.GENERATE_LEVEL_SQUARES,
-    payload: null
-  });
-};
-
-export const toMainMenu = () => dispatch => {
-  console.log('toMainMenu');
-  dispatch({
-    type: types.MAIN_MENU,
-    payload: null
-  });
-};
-
-export const onWin = (player, players) => dispatch => {
-  console.log('You have won');
-  dispatch({ type: types.GENERATE_LEVEL_SQUARES, payload: {stopTimer: true} })
-  dispatch(initLevel(player, players));
-};
-
-export const onLose = (player, players) => dispatch => {
-  console.log('You have lost');
-  dispatch({ type: types.GENERATE_LEVEL_SQUARES, payload: {stopTimer: true} })
-  dispatch(initLevel(player, players));
 };
 
 export const generateLevelSquares = (startSquare, level) => dispatch => {
@@ -63,49 +62,40 @@ export const generateLevelSquares = (startSquare, level) => dispatch => {
     current = nextSquare;
     levelSquares.push(nextSquare);
   }
-  let linkedSquares = [].concat(
+  const linkedSquares = [].concat(
     utils.genHorizontalSquares(startSquare),
     utils.genVerticalSquares(startSquare),
     utils.genDiagonalSquares(startSquare)
   );
-  linkedSquares = linkedSquares.filter(s => {
+  const litSquares = linkedSquares.filter(s => {
     return utils.searchForArray(levelSquares, s) > -1;
   });
-  console.log(levelSquares);
   dispatch({
     type: types.GENERATE_LEVEL_SQUARES,
-    payload: { levelSquares, linkedSquares }
+    payload: { levelSquares, checkedSquares: [startSquare], litSquares }
   });
 };
 
-export const genLinkedSquares = (
+export const checkSquare = (
   square,
   levelSquares,
-  checked
+  checkedSquares
 ) => dispatch => {
-  let linkedSquares = [].concat(
+  const linkedSquares = [].concat(
     utils.genHorizontalSquares(square),
     utils.genVerticalSquares(square),
     utils.genDiagonalSquares(square)
   );
-  linkedSquares = linkedSquares.filter(s => {
+  const litSquares = linkedSquares.filter(s => {
     return (
       utils.searchForArray(levelSquares, s) > -1 &&
-      !(utils.searchForArray(checked, s) > -1)
+      !(utils.searchForArray(checkedSquares, s) > -1)
     );
   });
-  checkSquare(square);
+  checkedSquares.push(square);
   dispatch({
-    type: types.GEN_LINKED_SQUARES,
-    payload: { square, linkedSquares }
+    type: types.CHECK_SQUARE,
+    payload: { checkedSquares, litSquares }
   });
-  checked.push(square);
-  return { linkedSquares, checked };
+  return { litSquares, checkedSquares };
 };
-
-export const selectPlayer = (player, players) => {
-  return {
-    type: types.SELECT_PLAYER,
-    payload: {player, players}
-  }
-}

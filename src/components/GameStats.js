@@ -5,21 +5,30 @@ import * as actions from '../actions';
 
 class GameStats extends Component {
   componentWillReceiveProps(nextProps) {
-    const { level, timesCompleted } = this.props.gameProps;
-    if (
-      nextProps.gameLogic.timer &&
-      nextProps.gameLogic.timer !== this.props.gameLogic.timer
-    ) {
+    const { levelStarted, levelCompleted } = this.props.gameProps;
+    const next = nextProps.gameProps;
+    if (next.levelStarted && next.levelStarted !== levelStarted) {
       this.setState({ elapsedTime: 0 });
       this.interval = setInterval(this.tick, 1000);
-    } else if (!nextProps.gameLogic.timer) {
+    } 
+    if (next.levelCompleted && next.levelCompleted !== levelCompleted) {
       clearInterval(this.interval);
-      this.saveUserScore(this.state.elapsedTime);
+      this.savePlayerScore(this.state.elapsedTime);
     }
   }
 
-  saveUserScore = elapsedTime => {
-    const players = this.props.gameProps.users;
+  savePlayerScore = time => {
+    const { level, topScores } = this.props.gameProps;
+    let levelScores = topScores[`level${level}`];
+    if (!levelScores) {
+      levelScores = { topTime: time, allTimes: [time] };
+      topScores[`level${level}`] = levelScores;
+    } else {
+      levelScores.allTimes.push(time);
+      if (time < levelScores.topTime) levelScores.topTime = time;
+    }
+    console.log('topScores', topScores);
+    // this.props.saveScores(topScores);
   };
 
   state = { elapsedTime: 0 };

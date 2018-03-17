@@ -18,7 +18,7 @@ class Menu extends Component {
   onSelectLevel = ({ level }) => {
     const { player, players } = this.props.gameProps;
     this.props.initLevel(parseInt(level) || player.level);
-    this.props.startGame(true);
+    this.props.startGame(false);
   };
 
   toggleModal = () => {

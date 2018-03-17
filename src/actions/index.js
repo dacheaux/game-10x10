@@ -4,7 +4,7 @@ import * as utils from '../utils';
 export const initLevel = level => {
   return {
     type: types.INIT_LEVEL,
-    payload: {level}
+    payload: {level, levelReady: true}
   };
 };
 
@@ -15,10 +15,10 @@ export const selectPlayer = (player, players) => {
   }
 }
 
-export const startGame = start => dispatch => {
+export const startGame = levelStarted => dispatch => {
   dispatch({
     type: types.START_GAME,
-    payload: {start}
+    payload: {levelStarted, levelCompleted: false}
   });
   dispatch({
     type: types.GENERATE_LEVEL_SQUARES,
@@ -26,15 +26,18 @@ export const startGame = start => dispatch => {
   });
 };
 
+export const levelEnd = levelCompleted => {
+  return {
+    type: types.LEVEL_END,
+    payload: { levelCompleted, levelStarted: false }
+  }
+}
+
 export const onWin = (level, player, players) => dispatch => {
-  dispatch(initLevel(level));
-  dispatch({ type: types.GENERATE_LEVEL_SQUARES, payload: {stopTimer: true} })
   dispatch(savePlayer(player, players));
 };
 
 export const onLose = (level, player, players) => dispatch => {
-  dispatch(initLevel(level));
-  dispatch({ type: types.GENERATE_LEVEL_SQUARES, payload: {stopTimer: true} })
   dispatch(savePlayer(player, players));
 };
 
@@ -47,6 +50,7 @@ export const savePlayer = (player, players) => {
 
 export const nextLevel = (level) => dispatch => {
   dispatch(initLevel(level));
+  dispatch({ type: types.GENERATE_LEVEL_SQUARES })
   dispatch({
     type: types.GENERATE_LEVEL_SQUARES,
     payload: null
@@ -74,6 +78,7 @@ export const generateLevelSquares = (startSquare, level) => dispatch => {
     type: types.GENERATE_LEVEL_SQUARES,
     payload: { levelSquares, checkedSquares: [startSquare], litSquares }
   });
+  dispatch({ type: types.START_GAME, payload: { levelStarted: true } })
 };
 
 export const checkSquare = (

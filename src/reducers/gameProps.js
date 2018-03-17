@@ -8,9 +8,11 @@ const initialState = {
     lives: 0,
     scores: {}
   },
+  topScores: {},
+  levelReady: false,
   level: 1,
-  levelIsComplete: false,
-  start: false
+  levelStarted: false,
+  levelCompleted: false
 };
 
 export default (state = initialState, action) => {
@@ -23,6 +25,8 @@ export default (state = initialState, action) => {
       return Object.assign({}, state, { ...action.payload });
     case types.INIT_LEVEL:
       return Object.assign({}, state, { ...action.payload });
+    case types.LEVEL_END:
+      return Object.assign({}, state, { ...action.payload });  
     case types.GAME_WON:
       return state;
     default:

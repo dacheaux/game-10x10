@@ -14,7 +14,8 @@ class Square extends Component {
     modalHeading: ''
   };
 
-  toggleEndLevel = (isWin, uncheckedSquares) => {
+  endLevel = (isWin, uncheckedSquares) => {
+    this.props.levelEnd(isWin);
     const { player, players, level } = this.props.gameProps;
     this.setState(prevState => {
       const modalHeading = isWin
@@ -70,9 +71,9 @@ class Square extends Component {
         const uncheckedSquares =
           levelSquares.length - res.checkedSquares.length;
         if (uncheckedSquares) {
-          return this.toggleEndLevel(false, uncheckedSquares);
+          return this.endLevel(false, uncheckedSquares);
         }
-        return this.toggleEndLevel(true, uncheckedSquares);
+        return this.endLevel(true, uncheckedSquares);
       }
     }
   };
@@ -80,13 +81,13 @@ class Square extends Component {
   render() {
     const { generateLevelSquares, coords: square } = this.props;
     const { checkedSquares, litSquares, levelSquares } = this.props.gameLogic;
-    const { player, level, start } = this.props.gameProps;
+    const { player, level, levelReady } = this.props.gameProps;
 
     const checked = utils.isContainedIn(checkedSquares, square);
     const lit = utils.isContainedIn(litSquares, square);
     const unchecked =
       utils.isContainedIn(levelSquares, square) && !checked && !lit;
-    const active = start;
+    const active = levelReady;
     const squareClass = classNames({
       square: true,
       active,
@@ -95,7 +96,7 @@ class Square extends Component {
       checked
     });
     const onSquareClick =
-      start && !levelSquares.length
+      levelReady && !levelSquares.length
         ? () => generateLevelSquares(square, level)
         : this.onSquareClick;
     return (

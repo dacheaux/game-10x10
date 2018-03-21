@@ -32,12 +32,12 @@ class GameStats extends Component {
   saveScores = (time, times) => {
     const { level, player, players } = this.props.gameProps;
     const { levelSquares, checkedSquares } = this.props.gameLogic;
-    const timeChart = times.map((e, i, arr) => Math.round((e - arr[0]) / 1000));
-    timeChart.splice(0, 1);
     const { scores } = player;
 
     const newPlayers = players.filter(item => item.name !== player.name);
     if (time !== null) {
+      const timeChart = times.map((e, i, arr) => Math.round((e - arr[0]) / 1000));
+      timeChart.splice(0, 1);
       let levelScores = scores[`level${level}`];
       if (!levelScores) {
         levelScores = {
@@ -78,19 +78,19 @@ class GameStats extends Component {
     const { levelSquares, checkedSquares, timer } = this.props.gameLogic;
     const { gameProps } = this.props;
     return (
-      <div className="row menu">
-        <h5 className="col-auto text-danger">Game Stats</h5>
-        <div className="col-9 row">
-          <h6 className="col-3">
+      <div className="d-flex menu">
+        <h5 className="col-auto p-0 mr-4 text-danger">Game Stats</h5>
+        <div className="w-100 p-0 d-flex justify-content-between">
+          <h6 className="">
             Timer: <b>{Math.round(this.state.timer)}</b>
           </h6>
-          <h6 className="col-3">
+          <h6 className="">
             Left to click: <b>{levelSquares.length - checkedSquares.length}</b>
           </h6>
-          <h6 className="col-3">
+          <h6 className="">
             Lives: <b>{gameProps.player.lives}</b>
           </h6>
-          <h6 className="col-3">
+          <h6 className="">
             Level: <b>{gameProps.level}</b>
           </h6>
         </div>

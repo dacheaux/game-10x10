@@ -11,7 +11,8 @@ class Square extends Component {
   state = {
     isModalOpen: false,
     modalText: '',
-    modalHeading: ''
+    modalHeading: '',
+    isWin: false
   };
 
   endLevel = isWin => {
@@ -19,7 +20,7 @@ class Square extends Component {
     const { level } = this.props.gameProps;
     this.setState(prevState => {
       let modalHeading = isWin
-        ? `You have completed level: ${level}`
+        ? `You have completed level: ${this.props.gameProps.level}`
         : 'End game';
       let modalText = isWin
         ? 'Do you want to play another level?'
@@ -28,15 +29,16 @@ class Square extends Component {
         modalHeading = 'Congratulations, you have finished the game!';
         modalText = 'Do you want to play from the beginning?';
       }
-      return { isModalOpen: !prevState.isModalOpen, modalText, modalHeading };
+      return { isModalOpen: !prevState.isModalOpen, modalText, modalHeading, isWin };
     });
   };
 
   onYesOrNo = isYes => {
+    let { level } = this.props.gameProps;
     this.setState(prevState => {
       return { isModalOpen: !prevState.isModalOpen };
     });
-    if (isYes) return this.props.nextLevel(++this.props.gameProps.level);
+    if (isYes) return this.props.nextLevel(this.state.isWin ? ++level : level);
     return this.props.startGame(false);
   };
 

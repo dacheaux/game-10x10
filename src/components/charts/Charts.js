@@ -7,15 +7,15 @@ import ScoreChart from './ScoreChart';
 export default class Charts extends Component {
   state = {
     dimensions: {
-      width: -1,
-      height: -1
+      width: 100,
+      height: 100
     }
   };
 
   render() {
     const { width, height } = this.state.dimensions;
     return (
-      <div className="">
+      <div className="mt-2">
         <Measure
           bounds
           onResize={contentRect => {

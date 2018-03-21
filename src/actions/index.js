@@ -99,9 +99,7 @@ export const checkSquare = (
       !(utils.searchForArray(checkedSquares, s) > -1)
     );
   });
-  console.log('checkedSquares', checkedSquares);
   checkedSquares.push(square);
-  console.log('checkedSquaresAfterPush', checkedSquares);
   dispatch({
     type: types.CHECK_SQUARE,
     payload: { checkedSquares, litSquares },

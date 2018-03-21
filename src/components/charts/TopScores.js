@@ -11,32 +11,32 @@ class TopScores extends Component {
       levels.push(i);
     }
     const renderLevels = levels.map(level => {
-      return <li key={level} className="list-group-item">Level {level}</li>;
+      return <li key={level} className="list-group-item p-1">Level {level}</li>;
     });
     const renderTime = levels.map(level => {
-      return <li key={level} className="list-group-item">{player.scores[`level${level}`].topTime}</li>;
+      return <li key={level} className="list-group-item p-1">{player.scores[`level${level}`].topTime}</li>;
     });
     const renderTimesCompleted = levels.map(level => {
-      return <li key={level} className="list-group-item">{player.scores[`level${level}`].timesCompleted}</li>;
+      return <li key={level} className="list-group-item p-1">{player.scores[`level${level}`].timesCompleted}</li>;
     });
     return (
       <div className="row mb-5">
         <div className="col-4">
-          Level{' '}
+          <h6 className="p-1 font-weight-bold">Level{' '}</h6>
           <div>
-            <ul className="list-group">{renderLevels}</ul>
+            <ul className="list-group list-group-flush">{renderLevels.slice(0, 7)}</ul>
           </div>
         </div>
         <div className="col-4">
-          Time{' '}
+          <h6 className="p-1 font-weight-bold">Time{' '}</h6>
           <div>
-            <ul className="list-group">{renderTime}</ul>
+            <ul className="list-group list-group-flush">{renderTime.slice(0, 7)}</ul>
           </div>
         </div>
         <div className="col-4">
-          Times completed{' '}
+          <h6 className="p-1 font-weight-bold">Times completed{' '}</h6>
           <div>
-            <ul className="list-group">{renderTimesCompleted}</ul>
+            <ul className="list-group list-group-flush">{renderTimesCompleted.slice(0, 7)}</ul>
           </div>
         </div>
       </div>

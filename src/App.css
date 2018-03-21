@@ -8,10 +8,6 @@
   background-color: #FFFFF6;
 }
 
-.row-field {
-  display: flex;
-}
-
 .lit {
   background-color: #D0D765;
 }
@@ -38,10 +34,5 @@
 }
 
 .menu {
-  display: flex;
   max-width: 85vh;
-}
-
-.menu-top {
-  margin-top: 1rem;
 }

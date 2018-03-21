@@ -5,7 +5,7 @@ import * as actions from '../actions';
 
 export default props => {
   const Rows = [];
-  const Row = (rowProps) => <div className="row-field">{rowProps.children}</div>;
+  const Row = (rowProps) => <div className="d-flex">{rowProps.children}</div>;
 
   for (let i = 1; i <= 10; i++) {
     let Squares = [];

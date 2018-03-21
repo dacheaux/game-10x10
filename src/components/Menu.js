@@ -29,8 +29,8 @@ class Menu extends Component {
     const { gameProps } = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props;
     return (
-      <div className="menu menu-top">
-        <div className="col-8 p-0 d-flex">
+      <div className="menu mt-2">
+        <div className="w-100 p-0 d-flex justify-content-between">
           <button className="btn btn-primary btn-sm" onClick={this.toggleModal}>
             New player
           </button>
@@ -54,9 +54,6 @@ class Menu extends Component {
               Start game
             </button>
           </form>
-        </div>
-        <div className="col-4 p-0 d-flex align-items-center justify-content-end">
-          Hello, {gameProps.player.name}
         </div>
         <ChoosePlayer
           show={this.state.isModalOpen}

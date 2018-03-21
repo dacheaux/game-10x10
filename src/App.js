@@ -11,12 +11,12 @@ class App extends Component {
     return (
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-7">
+          <div className="col-md-6">
             <Menu />
             <Rows />
             <GameStats />
           </div>
-          <div className="col-md-5 info mt-5">
+          <div className="col-md-6 info mt-5">
             <Charts />
           </div>
         </div>

@@ -4,66 +4,38 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 
 class GameStats extends Component {
-  state = { timer: 0, betweenClicks: 0, times: [] };
+  state = { timer: 0 };
 
   componentWillReceiveProps(nextProps) {
-    const {
-      levelStarted,
-      levelCompleted,
-      levelReady,
-      scoreChart
-    } = this.props.gameProps;
-    const { checkedSquares } = this.props.gameLogic;
+    const { levelStarted, levelCompleted, levelReady } = this.props.gameProps;
     const next = nextProps.gameProps;
     if (next.levelStarted && next.levelStarted !== levelStarted) {
-      this.setState({ betweenClicks: 0 });
-      this.tickInterval = setInterval(this.tick, 500);
-      this.tockInterval = setInterval(this.tock, 500);
-    }
-    if (nextProps.gameLogic.checkedSquares.length !== checkedSquares.length && checkedSquares.length !== 0) {
-      clearInterval(this.tickInterval);
-      this.setState(prevState => {
-        prevState.times.push(Math.round(this.state.betweenClicks / 2));
-        return {
-          times: prevState.times,
-          betweenClicks: 0
-        };
-      });
-      this.tickInterval = setInterval(this.tick, 500);
+      this.tickInterval = setInterval(this.tick, 1000);
     }
     if (next.levelCompleted && next.levelCompleted !== levelCompleted) {
       clearInterval(this.tickInterval);
-      clearInterval(this.tockInterval);
-      this.saveScores(Math.round(this.state.timer / 2), this.state.times);
+      this.saveScores(this.state.timer, nextProps.gameLogic.times);
     } else if (!next.levelStarted && next.levelStarted !== levelStarted) {
       clearInterval(this.tickInterval);
-      clearInterval(this.tockInterval);
       this.saveScores(null);
     }
     if (next.levelReady && next.levelReady !== levelReady)
-      this.setState({ timer: 0, betweenClicks: 0, times: [] });
+      this.setState({ timer: 0 });
   }
 
   tick = () => {
-    this.setState(prevState => {
-      return { betweenClicks: ++prevState.betweenClicks };
-    });
-  };
-
-  tock = () => {
     this.setState(prevState => {
       return { timer: ++prevState.timer };
     });
   };
 
-  // // if (squareChecked) {
-  //   times.push(); clearInterval; if (!levelCompleted) setInterval();
-  // }
-
   saveScores = (time, times) => {
-    console.log(time, times);
     const { level, player, players } = this.props.gameProps;
     const { levelSquares, checkedSquares } = this.props.gameLogic;
+    const timeChart = times.map(
+      (e, i, arr) => Math.round((e - arr[0]) / 1000)
+    );
+    timeChart.splice(0, 1);
     const { scores } = player;
 
     const newPlayers = players.filter(item => item.name !== player.name);
@@ -74,7 +46,7 @@ class GameStats extends Component {
           timesCompleted: 1,
           topTime: time,
           allTimes: [time],
-          topTimeChart: times
+          topTimeChart: timeChart
         };
       } else {
         ++levelScores.timesCompleted;
@@ -85,7 +57,7 @@ class GameStats extends Component {
         }
         if (time < levelScores.topTime || !levelScores.topTime) {
           levelScores.topTime = time;
-          levelScores.topTimeChart = times;
+          levelScores.topTimeChart = timeChart;
         }
       }
       if (level >= player.level) ++player.level;

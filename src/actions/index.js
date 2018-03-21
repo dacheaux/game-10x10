@@ -74,7 +74,7 @@ export const generateLevelSquares = (startSquare, level) => dispatch => {
   });
   dispatch({
     type: types.GENERATE_LEVEL_SQUARES,
-    payload: { levelSquares, checkedSquares: [startSquare], litSquares }
+    payload: { levelSquares, checkedSquares: [startSquare], litSquares, times: [new Date()] }
   });
   dispatch({
     type: types.INIT_LEVEL,
@@ -85,7 +85,8 @@ export const generateLevelSquares = (startSquare, level) => dispatch => {
 export const checkSquare = (
   square,
   levelSquares,
-  checkedSquares
+  checkedSquares,
+  time
 ) => dispatch => {
   const linkedSquares = [].concat(
     utils.genHorizontalSquares(square),
@@ -103,7 +104,8 @@ export const checkSquare = (
   console.log('checkedSquaresAfterPush', checkedSquares);
   dispatch({
     type: types.CHECK_SQUARE,
-    payload: { checkedSquares, litSquares }
+    payload: { checkedSquares, litSquares },
+    time
   });
   return { litSquares, checkedSquares };
 };

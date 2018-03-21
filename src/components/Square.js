@@ -45,7 +45,8 @@ class Square extends Component {
     const { levelSquares, litSquares, checkedSquares } = this.props.gameLogic;
     if (!utils.isContainedIn(levelSquares, square)) return;
     if (utils.isContainedIn(litSquares, square)) {
-      const res = checkSquare(square, levelSquares, JSON.parse(JSON.stringify(checkedSquares)));
+      const timeStamp = new Date();
+      const res = checkSquare(square, levelSquares, JSON.parse(JSON.stringify(checkedSquares)), timeStamp);
       if (!res.litSquares.length) {
         const uncheckedSquares =
           levelSquares.length - res.checkedSquares.length;

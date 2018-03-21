@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 class TopScores extends Component {
   render() {
     let { level, player } = this.props;
-    console.log('player.scores', player.scores[`level${level}`]);
     if (!player.scores[`level${level}`]) level = level - 1;
     const levels = [];
     for (let i = level; i > 0; i--) {
@@ -20,7 +19,7 @@ class TopScores extends Component {
       return <li key={level} className="list-group-item">{player.scores[`level${level}`].timesCompleted}</li>;
     });
     return (
-      <div className="row">
+      <div className="row mb-5">
         <div className="col-4">
           Level{' '}
           <div>

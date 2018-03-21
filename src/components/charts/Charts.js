@@ -24,8 +24,8 @@ export default class Charts extends Component {
         >
           {({ measureRef }) => (
             <div ref={measureRef}>
-              <TopScores />
-              <ScoreChart size={width} />
+              <TopScores show={this.props.show}/>
+              <ScoreChart size={width} show={this.props.show} />
             </div>
           )}
         </Measure>

@@ -32,9 +32,7 @@ class GameStats extends Component {
   saveScores = (time, times) => {
     const { level, player, players } = this.props.gameProps;
     const { levelSquares, checkedSquares } = this.props.gameLogic;
-    const timeChart = times.map(
-      (e, i, arr) => Math.round((e - arr[0]) / 1000)
-    );
+    const timeChart = times.map((e, i, arr) => Math.round((e - arr[0]) / 1000));
     timeChart.splice(0, 1);
     const { scores } = player;
 
@@ -83,12 +81,18 @@ class GameStats extends Component {
       <div className="row menu">
         <h5 className="col-auto text-danger">Game Stats</h5>
         <div className="col-9 row">
-          <h6 className="col-3">Timer: {Math.round(this.state.timer)}</h6>
           <h6 className="col-3">
-            Left to click: {levelSquares.length - checkedSquares.length}
+            Timer: <b>{Math.round(this.state.timer)}</b>
           </h6>
-          <h6 className="col-3">Lives: {gameProps.player.lives}</h6>
-          <h6 className="col-3">Level: {gameProps.level}</h6>
+          <h6 className="col-3">
+            Left to click: <b>{levelSquares.length - checkedSquares.length}</b>
+          </h6>
+          <h6 className="col-3">
+            Lives: <b>{gameProps.player.lives}</b>
+          </h6>
+          <h6 className="col-3">
+            Level: <b>{gameProps.level}</b>
+          </h6>
         </div>
       </div>
     );

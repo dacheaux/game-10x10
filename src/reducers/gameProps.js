@@ -8,7 +8,6 @@ const initialState = {
     lives: 0,
     scores: {}
   },
-  scoreChart: [],
   levelReady: false,
   level: 1,
   levelStarted: false,

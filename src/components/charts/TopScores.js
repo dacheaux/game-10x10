@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 class TopScores extends Component {
   render() {
+    if (!this.props.show) return null;
     let { level, player } = this.props;
     if (!player.scores[`level${level}`]) level = level - 1;
     const levels = [];

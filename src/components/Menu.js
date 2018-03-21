@@ -11,14 +11,12 @@ class Menu extends Component {
 
   componentDidMount() {
     const fetched = utils.fetchPlayer('anonPlayer');
-    this.props.startGame(false);
     this.props.selectPlayer(fetched.player, fetched.players);
   }
 
   onSelectLevel = ({ level }) => {
     const { player, players } = this.props.gameProps;
     this.props.initLevel(parseInt(level) || player.level);
-    this.props.startGame(false);
   };
 
   toggleModal = () => {

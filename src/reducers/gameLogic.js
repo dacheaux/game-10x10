@@ -5,7 +5,7 @@ const initialState = {
   levelSquares: [],
   checkedSquares: [],
   litSquares: [],
-  elapsedTime: 0
+  timer: 0
 };
 
 export default (state = initialState, action) => {

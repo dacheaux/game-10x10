@@ -33,6 +33,7 @@
 }
 
 .info {
+  height: 85vh;
   flex-grow: 1;
 }
 

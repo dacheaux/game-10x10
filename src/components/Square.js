@@ -14,43 +14,22 @@ class Square extends Component {
     modalHeading: ''
   };
 
-  endLevel = (isWin, uncheckedSquares) => {
+  endLevel = isWin => {
     this.props.levelEnd(isWin);
-    const { player, players, level } = this.props.gameProps;
+    const { level } = this.props.gameProps;
     this.setState(prevState => {
-      const modalHeading = isWin
+      let modalHeading = isWin
         ? `You have completed level: ${level}`
         : 'End game';
-      const modalText = isWin
+      let modalText = isWin
         ? 'Do you want to play another level?'
         : 'You have lost this level. Do you want to try again?';
+      if (level === 99 && isWin) {
+        modalHeading = 'Congratulations, you have finished the game!';
+        modalText = 'Do you want to play from the beginning?';
+      }
       return { isModalOpen: !prevState.isModalOpen, modalText, modalHeading };
     });
-    // if (this.props.level === 99) {
-    // }
-    const newPlayers = players.filter(item => item.name !== player.name);
-    if (isWin) {
-      const { scores } = player;
-      if (!scores[`level${player.level}`]) {
-        scores[`level${player.level}`] = {
-          timesCompleted: 0,
-          bestTime: 0,
-          allTimes: []
-        };
-      }
-      ++scores[`level${player.level}`].timesCompleted;
-      if (level > player.level) ++player.level;
-      ++player.lives;
-      newPlayers.push(player);
-      this.props.onWin(level, player, newPlayers);
-    } else {
-      player.lives = player.lives - uncheckedSquares;
-      if (player.lives < 0) player.lives = 0;
-      newPlayers.push(player);
-      this.props.onLose(level, player, newPlayers);
-    }
-    localStorage.setItem('player', JSON.stringify(player));
-    localStorage.setItem('players', JSON.stringify(newPlayers));
   };
 
   onYesOrNo = isYes => {
@@ -66,14 +45,14 @@ class Square extends Component {
     const { levelSquares, litSquares, checkedSquares } = this.props.gameLogic;
     if (!utils.isContainedIn(levelSquares, square)) return;
     if (utils.isContainedIn(litSquares, square)) {
-      const res = checkSquare(square, levelSquares, checkedSquares);
+      const res = checkSquare(square, levelSquares, JSON.parse(JSON.stringify(checkedSquares)));
       if (!res.litSquares.length) {
         const uncheckedSquares =
           levelSquares.length - res.checkedSquares.length;
         if (uncheckedSquares) {
-          return this.endLevel(false, uncheckedSquares);
+          return this.endLevel(false);
         }
-        return this.endLevel(true, uncheckedSquares);
+        return this.endLevel(true);
       }
     }
   };

@@ -24,6 +24,10 @@ export function fetchPlayer(playerName) {
   return { player, players };
 }
 
+export function startCounting() {
+  let i
+}
+
 export function isContainedIn(superset, subset) {
   superset = JSON.stringify(superset);
   subset = JSON.stringify(subset);

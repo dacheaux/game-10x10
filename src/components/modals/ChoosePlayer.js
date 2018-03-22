@@ -26,14 +26,21 @@ class ChoosePlayer extends Component {
       backgroundColor: 'rgba(0,0,0,0.1)',
       padding: 50
     };
-    const modalStyle = {
+    const modalDialog = {
+      position: 'relative',
       backgroundColor: '#D8D8D8',
+      border: '1px solid black',
       borderRadius: 5,
       maxWidth: 400,
       minHeight: 150,
       margin: '0 auto',
       padding: 10
     };
+    const closeButtonStyle = {
+      position: 'absolute',
+      right: 5,
+      bottom: 5
+    }
     const { handleSubmit } = this.props;
     const { players } = this.props.gameProps;
     const playersList = players.map(player => {
@@ -42,21 +49,22 @@ class ChoosePlayer extends Component {
 
     return (
       <div className="backdrop" style={backdropStyle}>
-        <div className="modalDialog" style={modalStyle}>
+        <div className="modalDialog" style={modalDialog}>
           <p>Select player from dropdown or enter new player</p>
           <div>
-            <form onSubmit={handleSubmit(this.onSelectPlayer)}>
-              <Field component="input" list="players" name="playerName" />
+            <form className="form-inline" onSubmit={handleSubmit(this.onSelectPlayer)}>
+              <Field className="form-control w-75" component="input" list="players" name="playerName" />
               <Field component="datalist" id="players" name="savedPlayers">
                 {playersList}
               </Field>
-              <input type="submit" value="Choose" />
+              <input className="btn btn-secondary" type="submit" value="Choose" />
             </form>
           </div>
           <button
             type="button"
             className="btn btn-secondary btn-sm"
             onClick={this.props.toggleModal}
+            style={closeButtonStyle}
           >
             Close
           </button>

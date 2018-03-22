@@ -15,5 +15,5 @@ export default props => {
     Rows.push(<Row key={i}>{Squares}</Row>);
   }
 
-  return <div className="main my-2">{Rows}</div>;
+  return <div className="game-row my-2">{Rows}</div>;
 };

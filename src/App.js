@@ -11,20 +11,20 @@ import * as actions from './actions';
 import './App.css';
 
 class App extends Component {
-  state = { topScores: false };
+  state = { showTopScores: false };
 
   onShowTopScores = () => {
     this.setState(prevState => {
-      return { topScores: !prevState.topScores };
+      return { showTopScores: !prevState.showTopScores };
     });
   };
 
   componentWillReceiveProps(nextProps) {
-    const { levelStarted, levelCompleted, level } = this.props.gameProps;
+    const { levelStarted, levelCompleted, level, isChoosePlayerOpen } = this.props.gameProps;
     const next = nextProps.gameProps;
     if (next.levelCompleted && next.levelCompleted !== levelCompleted)
       return this.props.setModal(true, level);
-    if (!next.levelStarted && next.levelStarted !== levelStarted)
+    if (!next.levelStarted && next.levelStarted !== levelStarted && !isChoosePlayerOpen)
       this.props.setModal(false, level);
   }
 
@@ -35,30 +35,35 @@ class App extends Component {
   };
 
   render() {
-    const { player, isModalOpen, modalHeading, modalText, isChoosePlayerOpen } = this.props.gameProps;
-    const infoClass = classNames({ "col-md-6 info mt-3": true, "low-z-index": isChoosePlayerOpen })
+    const {
+      player,
+      levelReady,
+      isModalOpen,
+      modalHeading,
+      modalText,
+      isChoosePlayerOpen
+    } = this.props.gameProps;
+    const mainClass = classNames({
+      'col-md-6': true,
+      'low-z-index': isChoosePlayerOpen
+    });
+    const infoClass = classNames({
+      'col-md-6 info mt-3': true,
+      'low-z-index': isChoosePlayerOpen
+    });
+    const gameInfo =
+      levelReady && !this.state.showTopScores ? 'Click on a square to begin' : '';
     return (
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-6">
-            <Menu />
+          <Menu showTopScores={this.onShowTopScores} />
+          <div className={mainClass}>
             <Rows />
             <GameStats />
           </div>
           <div className={infoClass}>
-            <div className="w-100 p-0 d-flex justify-content-between">
-              <div className="p-0">
-                Hello, <span className="text-info">{player.name}</span>
-              </div>
-              <button
-                type="button"
-                className="btn btn-primary btn-sm"
-                onClick={this.onShowTopScores}
-              >
-                Show top scores
-              </button>
-            </div>
-            <Charts show={this.state.topScores} />
+            {gameInfo}
+            <Charts show={this.state.showTopScores} />
           </div>
           <LevelEnd show={isModalOpen} yesOrNo={this.onYesOrNo}>
             <h3>{modalHeading}</h3>

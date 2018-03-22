@@ -8,12 +8,11 @@ class ScoreChart extends Component {
 
   drawChart() {
     const { level, player, size } = this.props;
-    const width = Math.round(size * 0.9);
-    const height = Math.round(size * 0.6);
     const scores = player.scores[`level${level}`];
+    const canvas = this.refs.canvas;
+    const ctx = canvas.getContext('2d');
+    const {width, height} = canvas;
     if (scores) {
-      console.log('ScoreChart level', level);
-      console.log('ScoreChart scores', scores);
       const start = 15;
       const actions = scores.topTimeChart.length;
       const xAxisLength = width - start,
@@ -21,10 +20,8 @@ class ScoreChart extends Component {
       const maxSeconds = Math.max(...scores.topTimeChart);
       const unitStepX = Math.floor(xAxisLength / actions),
         unitStepY = Math.floor(yAxisLength / maxSeconds);
-      const canvas = this.refs.canvas;
-      const ctx = canvas.getContext('2d');
       ctx.beginPath();
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, width, height);
       let xCoord = start,
         yCoord = height - start;
       ctx.stroke();
@@ -50,7 +47,11 @@ class ScoreChart extends Component {
       ctx.stroke();
       const stepY = Math.round(yAxisLength / numOfStepsY);
       ctx.beginPath();
-      for (let i = delineationY, j = stepY; i < numOfStepsY; i = i + delineationY) {
+      for (
+        let i = delineationY, j = stepY;
+        i < numOfStepsY;
+        i = i + delineationY
+      ) {
         const step = height - start - j;
         ctx.moveTo(10, step);
         ctx.lineTo(20, step);
@@ -70,16 +71,27 @@ class ScoreChart extends Component {
       ctx.fillText('Actions', width - 50, height - 20);
       ctx.fillText('Seconds', 20, 10);
       ctx.stroke();
+    } else {
+      ctx.clearRect(0, 0, width, height);
     }
   }
 
   render() {
-    const { size, show, level } = this.props;
+    const { size, show, level, player } = this.props;
     const width = Math.round(size * 0.9),
       height = Math.round(size * 0.6);
     const className = show ? '' : 'd-none';
+    const heading = player.scores[`level${level}`] ? (
+      <h5>
+        Score Chart <small className="text-muted">(level {level})</small>
+      </h5>
+    ) : (
+      <h5>No score chart for this level</h5>
+    );
     return (
       <div className={className}>
+        {heading}
+        <hr className="col-10 mt-1 mb-4" />
         <canvas ref="canvas" width={width} height={height} />
       </div>
     );

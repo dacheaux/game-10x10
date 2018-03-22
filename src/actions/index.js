@@ -11,7 +11,7 @@ export const initLevel = level => {
 export const selectPlayer = (player, players) => {
   return {
     type: types.SELECT_PLAYER,
-    payload: { player, players }
+    payload: { player, players, level: player.level }
   };
 };
 

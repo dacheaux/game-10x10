@@ -38,7 +38,14 @@ class TopScores extends Component {
                 <span className="text-center">
                   <ul className="list-group list-group-flush">
                     {otherTimes.map(time => {
-                      return <li className="list-group-item p-1 dropdown-bg" key={_.uniqueId('time')}>{time}</li>;
+                      return (
+                        <li
+                          className="list-group-item p-1 dropdown-bg"
+                          key={_.uniqueId('time')}
+                        >
+                          {time}
+                        </li>
+                      );
                     })}
                   </ul>
                 </span>
@@ -52,7 +59,9 @@ class TopScores extends Component {
       );
     });
     return (
-      <div className="row mb-5">
+      <div className="row px-3 mb-5">
+        <h5>Top score</h5>
+        <hr className="col-10 mt-1"/>
         <div className="col-12 d-flex">
           <h6 className="col-4 p-1 font-weight-bold">Level </h6>
           <h6 className="col-4 p-1 font-weight-bold">Time </h6>

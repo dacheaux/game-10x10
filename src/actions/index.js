@@ -16,7 +16,7 @@ export const selectPlayer = (player, players) => {
 };
 
 export const startGame = levelStarted => dispatch => {
-  dispatch({ type: types.SET_MODAL, payload: { isModalOpen: false } });
+  dispatch({ type: types.SET_MODAL, payload: { isEndLevelModalOpen: false } });
   dispatch({
     type: types.INIT_LEVEL,
     payload: { levelStarted, levelCompleted: false }
@@ -45,7 +45,7 @@ export const setModal = (isWin, level) => dispatch => {
   }
   dispatch({
     type: types.SET_MODAL,
-    payload: { modalHeading, modalText, isModalOpen: true }
+    payload: { modalHeading, modalText, isEndLevelModalOpen: true }
   });
 };
 
@@ -69,7 +69,7 @@ export const savePlayer = (player, players) => {
 
 export const nextLevel = level => dispatch => {
   if (level === 99) level = 1;
-  dispatch({ type: types.SET_MODAL, payload: { isModalOpen: false } });
+  dispatch({ type: types.SET_MODAL, payload: { isEndLevelModalOpen: false } });
   dispatch(initLevel(level));
   dispatch({ type: types.GENERATE_LEVEL_SQUARES });
   dispatch({

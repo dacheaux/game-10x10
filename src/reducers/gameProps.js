@@ -12,7 +12,7 @@ const initialState = {
   level: 1,
   levelStarted: false,
   levelCompleted: false,
-  isModalOpen: false,
+  isEndLevelModalOpen: false,
   isChoosePlayerOpen: false,
   modalText: '',
   modalHeading: ''

@@ -13,7 +13,7 @@ export default class Charts extends Component {
   };
 
   render() {
-    const { width, height } = this.state.dimensions;
+    const { width } = this.state.dimensions;
     return (
       <div className="mt-2">
         <Measure

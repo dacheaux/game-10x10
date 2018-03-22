@@ -1,5 +1,4 @@
 import * as types from '../actions/types';
-import * as utils from '../utils';
 
 const initialState = {
   levelSquares: [],

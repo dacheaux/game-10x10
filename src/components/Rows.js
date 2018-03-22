@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Square from './Square';
-import * as actions from '../actions';
 
 export default props => {
   const Rows = [];

@@ -76,7 +76,7 @@ class GameStats extends Component {
   };
 
   render() {
-    const { levelSquares, checkedSquares, timer } = this.props.gameLogic;
+    const { levelSquares, checkedSquares } = this.props.gameLogic;
     const { gameProps } = this.props;
     return (
       <div className="d-flex menu">

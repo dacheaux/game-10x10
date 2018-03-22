@@ -36,9 +36,8 @@ class App extends Component {
 
   render() {
     const {
-      player,
       levelReady,
-      isModalOpen,
+      isEndLevelModalOpen,
       modalHeading,
       modalText,
       isChoosePlayerOpen
@@ -65,7 +64,7 @@ class App extends Component {
             {gameInfo}
             <Charts show={this.state.showTopScores} />
           </div>
-          <LevelEnd show={isModalOpen} yesOrNo={this.onYesOrNo}>
+          <LevelEnd show={isEndLevelModalOpen} yesOrNo={this.onYesOrNo}>
             <h3>{modalHeading}</h3>
             <p>{modalText}</p>
           </LevelEnd>

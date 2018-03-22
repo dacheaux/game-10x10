@@ -7,7 +7,7 @@ import * as actions from '../actions';
 import * as utils from '../utils';
 
 class Menu extends Component {
-  state = { isModalOpen: false };
+  state = { isEndLevelModalOpen: false };
 
   componentDidMount() {
     const fetched = utils.fetchPlayer('anonPlayer');
@@ -15,16 +15,16 @@ class Menu extends Component {
   }
 
   onSelectLevel = ({ level }) => {
-    const { player, players } = this.props.gameProps;
-    this.props.initLevel(parseInt(level) || player.level);
+    const { player } = this.props.gameProps;
+    this.props.initLevel(parseInt(level, 10) || player.level);
   };
 
   toggleModal = () => {
     this.setState(
       prevState => {
-        return { isModalOpen: !prevState.isModalOpen };
+        return { isEndLevelModalOpen: !prevState.isEndLevelModalOpen };
       },
-      () => this.props.choosePlayer(this.state.isModalOpen)
+      () => this.props.choosePlayer(this.state.isEndLevelModalOpen)
     );
   };
 
@@ -73,7 +73,7 @@ class Menu extends Component {
           </button>
         </div>
         <ChoosePlayer
-          show={this.state.isModalOpen}
+          show={this.state.isEndLevelModalOpen}
           toggleModal={this.toggleModal}
         />
       </div>

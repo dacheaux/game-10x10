@@ -7,7 +7,7 @@ class ScoreChart extends Component {
   }
 
   drawChart() {
-    const { level, player, size } = this.props;
+    const { level, player } = this.props;
     const scores = player.scores[`level${level}`];
     const canvas = this.refs.canvas;
     const ctx = canvas.getContext('2d');

@@ -29,7 +29,7 @@ export function isContainedIn(superset, subset) {
   subset = JSON.stringify(subset);
 
   const index = superset.indexOf(subset);
-  if (index != -1) {
+  if (index !== -1) {
     return true;
   }
 }

@@ -1,23 +1,23 @@
 .square {
   padding-top: 100%;
   border: 1px solid;
-  background-color: #EFEFEF;
+  background-color: #efefef;
 }
 
-.active { 
-  background-color: #FFFFF6;
+.active {
+  background-color: #fffff6;
 }
 
 .lit {
-  background-color: #D0D765;
+  background-color: #d0d765;
 }
 
 .checked {
-  background-color: #276B68;
+  background-color: #276b68;
 }
 
 .unchecked {
-  background-color: #696D32;
+  background-color: #696d32;
 }
 
 .squareHolder {
@@ -35,4 +35,21 @@
 
 .menu {
   max-width: 85vh;
+}
+
+.dropdown-content {
+  position: relative;
+  left: 0;
+  width: 120px;
+  right: -16px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-bg {
+  background-color: #6c6c6c;
+}
+
+.low-z-index {
+  z-index: -1;
 }

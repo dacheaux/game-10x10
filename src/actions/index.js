@@ -16,7 +16,7 @@ export const selectPlayer = (player, players) => {
 };
 
 export const startGame = levelStarted => dispatch => {
-  if (levelStarted) setInterval(utils.startCounting, 1000);
+  dispatch({ type: types.SET_MODAL, payload: { isModalOpen: false } });
   dispatch({
     type: types.INIT_LEVEL,
     payload: { levelStarted, levelCompleted: false }
@@ -27,10 +27,32 @@ export const startGame = levelStarted => dispatch => {
   });
 };
 
-export const levelEnd = levelCompleted => { 
+export const levelEnd = levelCompleted => {
   return {
     type: types.INIT_LEVEL,
     payload: { levelCompleted, levelStarted: false }
+  };
+};
+
+export const setModal = (isWin, level) => dispatch => {
+  let modalHeading = isWin ? `You have completed level: ${level}` : 'End game';
+  let modalText = isWin
+    ? 'Do you want to play another level?'
+    : 'You have lost this level. Do you want to try again?';
+  if (level === 99 && isWin) {
+    modalHeading = 'Congratulations, you have finished the game!';
+    modalText = 'Do you want to play from the beginning?';
+  }
+  dispatch({
+    type: types.SET_MODAL,
+    payload: { modalHeading, modalText, isModalOpen: true }
+  });
+};
+
+export const choosePlayer = isChoosePlayerOpen => {
+  return {
+    type: types.SET_MODAL,
+    payload: { isChoosePlayerOpen }
   };
 };
 
@@ -47,6 +69,7 @@ export const savePlayer = (player, players) => {
 
 export const nextLevel = level => dispatch => {
   if (level === 99) level = 1;
+  dispatch({ type: types.SET_MODAL, payload: { isModalOpen: false } });
   dispatch(initLevel(level));
   dispatch({ type: types.GENERATE_LEVEL_SQUARES });
   dispatch({
@@ -74,7 +97,12 @@ export const generateLevelSquares = (startSquare, level) => dispatch => {
   });
   dispatch({
     type: types.GENERATE_LEVEL_SQUARES,
-    payload: { levelSquares, checkedSquares: [startSquare], litSquares, times: [new Date()] }
+    payload: {
+      levelSquares,
+      checkedSquares: [startSquare],
+      litSquares,
+      times: [new Date()]
+    }
   });
   dispatch({
     type: types.INIT_LEVEL,

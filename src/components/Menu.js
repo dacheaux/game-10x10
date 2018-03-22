@@ -22,7 +22,7 @@ class Menu extends Component {
   toggleModal = () => {
     this.setState(prevState => {
       return { isModalOpen: !prevState.isModalOpen };
-    });
+    }, () => this.props.choosePlayer(this.state.isModalOpen));
   };
 
   render() {

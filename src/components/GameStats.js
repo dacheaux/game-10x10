@@ -50,6 +50,7 @@ class GameStats extends Component {
         ++levelScores.timesCompleted;
         if (levelScores.allTimes) {
           levelScores.allTimes.push(time);
+          levelScores.allTimes.sort((a, b) => a - b);
         } else {
           levelScores.allTimes = [time];
         }

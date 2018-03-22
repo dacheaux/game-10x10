@@ -53,6 +53,13 @@ class ChoosePlayer extends Component {
               <input type="submit" value="Choose" />
             </form>
           </div>
+          <button
+            type="button"
+            className="btn btn-secondary btn-sm"
+            onClick={this.props.toggleModal}
+          >
+            Close
+          </button>
         </div>
       </div>
     );

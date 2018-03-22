@@ -11,7 +11,11 @@ const initialState = {
   levelReady: false,
   level: 1,
   levelStarted: false,
-  levelCompleted: false
+  levelCompleted: false,
+  isModalOpen: false,
+  isChoosePlayerOpen: false,
+  modalText: '',
+  modalHeading: ''
 };
 
 export default (state = initialState, action) => {
@@ -21,6 +25,8 @@ export default (state = initialState, action) => {
     case types.SAVE_PLAYER:
       return Object.assign({}, state, { ...action.payload });
     case types.INIT_LEVEL:
+      return Object.assign({}, state, { ...action.payload });
+    case types.SET_MODAL:
       return Object.assign({}, state, { ...action.payload }); 
     case types.GAME_WON:
       return state;

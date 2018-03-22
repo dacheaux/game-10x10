@@ -34,7 +34,7 @@ class Menu extends Component {
     return (
       <div className="row w-100 mx-2 mt-2">
         <div className="menu col-md-6 pl-2 pr-3 d-flex justify-content-between">
-          <button className="btn btn-primary btn-sm" onClick={this.toggleModal}>
+          <button className="btn btn-info btn-sm" onClick={this.toggleModal}>
             New player
           </button>
           <form
@@ -55,14 +55,14 @@ class Menu extends Component {
                 max={player.level}
               />
             </div>
-            <button type="submit" className="btn btn-secondary btn-sm">
+            <button type="submit" className="btn btn-dark btn-sm">
               Start game
             </button>
           </form>
         </div>
         <div className="col-md-6 p-0 d-flex justify-content-around">
           <div className="p-0">
-            Hello, <span className="text-info">{player.name}</span>
+            Hello, <span className="text-success font-weight-bold">{player.name}</span>
           </div>
           <button
             type="button"

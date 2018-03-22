@@ -13,6 +13,7 @@ class ScoreChart extends Component {
     const ctx = canvas.getContext('2d');
     const {width, height} = canvas;
     if (scores) {
+
       const start = 15;
       const actions = scores.topTimeChart.length;
       const xAxisLength = width - start,
@@ -79,7 +80,7 @@ class ScoreChart extends Component {
   render() {
     const { size, show, level, player } = this.props;
     const width = Math.round(size * 0.9),
-      height = Math.round(size * 0.6);
+      height = Math.round(size * 0.5);
     const className = show ? '' : 'd-none';
     const heading = player.scores[`level${level}`] ? (
       <h5 className="text-danger">

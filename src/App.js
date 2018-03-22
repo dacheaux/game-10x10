@@ -52,7 +52,7 @@ class App extends Component {
       'low-z-index': isChoosePlayerOpen
     });
     const gameInfo =
-      levelReady && !this.state.showTopScores ? 'Click on a square to begin' : '';
+      levelReady && !this.state.showTopScores ? <span className="text-danger">Click on a square to begin</span> : '';
     return (
       <div className="container-fluid">
         <div className="row">

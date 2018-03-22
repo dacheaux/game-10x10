@@ -4,11 +4,13 @@ import classNames from 'classnames';
 import _ from 'lodash';
 
 class TopScores extends Component {
-  state = { activeDropdown: 0 };
+  state = { activeDropdown: 0, isActive: false };
 
   showOtherTimes = e => {
-    const item = parseInt(e.target.id);
-    this.setState({ activeDropdown: item });
+    const item = parseInt(e.target.dataset.id);
+    this.setState(prevState => {
+      return { activeDropdown: item, isActive: !prevState.isActive };
+    }, () => console.log(this.state));
   };
 
   render() {
@@ -22,8 +24,8 @@ class TopScores extends Component {
 
     const renderList = allLevels.map((item, i) => {
       const otherTimes = player.scores[`level${item}`].allTimes.slice(1, 4);
-      const id = i + 1;
-      const active = this.state.activeDropdown === id;
+      const id = ++i;
+      const active = this.state.activeDropdown === id && this.state.isActive;
       const dropdownClass = classNames({
         'dropdown-content': true,
         'd-none': !active
@@ -32,8 +34,9 @@ class TopScores extends Component {
         <li key={_.uniqueId('item')} className="list-group-item p-1">
           <div className="d-flex justify-content-between w-100">
             <div className="col-4 p-0">Level {item}</div>
-            <div id={id} className="col-4 p-0" onClick={this.showOtherTimes}>
+            <div className="col-4 p-0">
               {player.scores[`level${item}`].topTime} seconds{' '}
+              <i className="fas fa-plus" data-id={id} onClick={this.showOtherTimes} />
               <div className={dropdownClass}>
                 <span className="text-center">
                   <ul className="list-group list-group-flush">
@@ -60,8 +63,8 @@ class TopScores extends Component {
     });
     return (
       <div className="row px-3 mb-5">
-        <h5>Top score</h5>
-        <hr className="col-10 mt-1"/>
+        <h5 className="text-danger">Top score</h5>
+        <hr className="col-10 mt-1" />
         <div className="col-12 d-flex">
           <h6 className="col-4 p-1 font-weight-bold">Level </h6>
           <h6 className="col-4 p-1 font-weight-bold">Time </h6>

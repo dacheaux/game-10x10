@@ -29,8 +29,6 @@ class ChoosePlayer extends Component {
     const modalDialog = {
       position: 'relative',
       backgroundColor: '#D8D8D8',
-      border: '1px solid black',
-      borderRadius: 5,
       maxWidth: 400,
       minHeight: 150,
       margin: '0 auto',
@@ -40,7 +38,7 @@ class ChoosePlayer extends Component {
       position: 'absolute',
       right: 5,
       bottom: 5
-    }
+    };
     const { handleSubmit } = this.props;
     const { players } = this.props.gameProps;
     const playersList = players.map(player => {
@@ -49,25 +47,34 @@ class ChoosePlayer extends Component {
 
     return (
       <div className="backdrop" style={backdropStyle}>
-        <div className="modalDialog" style={modalDialog}>
+        <div className="modalDialog border border-dark rounded" style={modalDialog}>
           <p>Select player from dropdown or enter new player</p>
           <div>
-            <form className="form-inline" onSubmit={handleSubmit(this.onSelectPlayer)}>
-              <Field className="form-control w-75" component="input" list="players" name="playerName" />
+            <form
+              className="form-inline"
+              onSubmit={handleSubmit(this.onSelectPlayer)}
+            >
+              <Field
+                className="form-control w-75"
+                component="input"
+                list="players"
+                name="playerName"
+              />
               <Field component="datalist" id="players" name="savedPlayers">
                 {playersList}
               </Field>
-              <input className="btn btn-secondary" type="submit" value="Choose" />
+              <input
+                className="btn btn-success"
+                type="submit"
+                value="Choose"
+              />
             </form>
           </div>
-          <button
-            type="button"
-            className="btn btn-secondary btn-sm"
+          <i
+            className="fas fa-times"
             onClick={this.props.toggleModal}
             style={closeButtonStyle}
-          >
-            Close
-          </button>
+          />
         </div>
       </div>
     );

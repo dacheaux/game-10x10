@@ -82,7 +82,7 @@ class ScoreChart extends Component {
       height = Math.round(size * 0.6);
     const className = show ? '' : 'd-none';
     const heading = player.scores[`level${level}`] ? (
-      <h5>
+      <h5 className="text-danger">
         Score Chart <small className="text-muted">(level {level})</small>
       </h5>
     ) : (

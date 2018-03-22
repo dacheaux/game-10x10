@@ -15,9 +15,8 @@ export default (props) => {
       padding: 50
     };
 
-    const modalStyle = {
+    const modalDialog = {
       backgroundColor: '#D8D8D8',
-      borderRadius: 5,
       maxWidth: 400,
       minHeight: 150,
       margin: '0 auto',
@@ -26,13 +25,13 @@ export default (props) => {
 
     return (
       <div className="backdrop" style={backdropStyle}>
-        <div className="modalDialog" style={modalStyle}>
+        <div className="modalDialog border border-dark rounded" style={modalDialog}>
           {props.children}
           <div className="footer">
-            <button onClick={e => props.yesOrNo(false)}>
+            <button className="btn btn-secondary" onClick={e => props.yesOrNo(false)}>
               No
             </button>
-            <button onClick={e => props.yesOrNo(true)} style={{marginLeft: 20}}>
+            <button className="btn btn-success" onClick={e => props.yesOrNo(true)} style={{marginLeft: 20}}>
               Yes
             </button>
           </div>

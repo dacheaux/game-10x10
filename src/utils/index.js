@@ -1,6 +1,10 @@
+export function fillArrayWithIndex(num) {
+  return (''+Array(num)).split(',').map(function(){return this[0]++;}, [0])
+}
+
 export function fetchPlayer(playerName) {
-  let player = JSON.parse(localStorage.getItem('player'));
-  let players = JSON.parse(localStorage.getItem('players')) || [];
+  let player = JSON.parse(localStorage.getItem('player-game-10x10'));
+  let players = JSON.parse(localStorage.getItem('players-game-10x10')) || [];
   const noPlayer = !Boolean(player);
   const newPlayer = {
     level: 1,
@@ -19,8 +23,8 @@ export function fetchPlayer(playerName) {
       players.push(player);
     }
   }
-  localStorage.setItem('player', JSON.stringify(player));
-  localStorage.setItem('players', JSON.stringify(players));
+  localStorage.setItem('player-game-10x10', JSON.stringify(player));
+  localStorage.setItem('players-game-10x10', JSON.stringify(players));
   return { player, players };
 }
 
@@ -34,6 +38,9 @@ export function isContainedIn(superset, subset) {
   }
 }
 
+/**
+
+*/
 export function searchForArray(haystack, needle) {
   let i, j, current;
   for (i = 0; i < haystack.length; ++i) {
@@ -46,16 +53,35 @@ export function searchForArray(haystack, needle) {
   return -1;
 }
 
-export function genNextSquare(current, levelSquares) {
-  let linkedSquares = [].concat(
-    genHorizontalSquares(current),
-    genVerticalSquares(current),
-    genDiagonalSquares(current)
-  );
-  linkedSquares = linkedSquares.filter(s => {
-    return !(searchForArray(levelSquares, s) > -1);
-  });
-  return linkedSquares[Math.floor(Math.random() * linkedSquares.length)];
+export function genNextSquare(current, levelSquares, n = 0, allGenerated = [], candidate = 0) {
+  if(current && n === 97) {
+    return allGenerated[0];
+  } else {
+    let linkedSquares = [].concat(
+      genHorizontalSquares(current),
+      genVerticalSquares(current),
+      genDiagonalSquares(current)
+    );
+    linkedSquares = linkedSquares.filter(s => {
+      return !(searchForArray(levelSquares, s) > -1);
+    });
+    // candidate = Math.floor(Math.random() * candidatesArray.length)
+    if (linkedSquares.length) {
+      candidate = Math.floor(Math.random() * linkedSquares.length)
+      ++n;
+      current = linkedSquares[candidate]; 
+      allGenerated.push(current);
+    } else {
+      console.log('else statement, allGenerated is %s | current is %s', JSON.stringify(allGenerated), JSON.stringify(current));
+      return null;
+      // allGenerated.pop()
+      // --n;
+      // current = allGenerated[allGenerated.length - 1]
+      // candidate = Math.floor(Math.random() * linkedSquares.length)
+      // current = allGenerated[n]
+    }
+    return genNextSquare(current, levelSquares, n, allGenerated, candidate)
+  }
 }
 
 export function genHorizontalSquares(current) {

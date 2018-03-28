@@ -78,14 +78,23 @@ export const nextLevel = level => dispatch => {
   });
 };
 
-export const generateLevelSquares = (startSquare, level) => dispatch => {
+export const generateLevelSquares = (startSquare, level) => async dispatch => {
   let levelSquares = [startSquare];
   let nextSquare,
+    next = null,
     current = startSquare;
   for (let i = 0; i < level; i++) {
+    console.log(i);
+    console.log('current from actions/index.js', current);
     nextSquare = utils.genNextSquare(current, levelSquares);
-    current = nextSquare;
-    levelSquares.push(nextSquare);
+    console.log('nextSquare', nextSquare);
+    if (!nextSquare) {
+      levelSquares.pop();
+      current = levelSquares[levelSquares.length - 1];
+    } else {
+      current = nextSquare;
+      levelSquares.push(nextSquare);
+    }
   }
   const linkedSquares = [].concat(
     utils.genHorizontalSquares(startSquare),

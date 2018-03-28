@@ -71,8 +71,8 @@ class GameStats extends Component {
       newPlayers.push(player);
       this.props.onWinOrLose(player, newPlayers);
     }
-    localStorage.setItem('player', JSON.stringify(player));
-    localStorage.setItem('players', JSON.stringify(newPlayers));
+    localStorage.setItem('player-game-10x10', JSON.stringify(player));
+    localStorage.setItem('players-game-10x10', JSON.stringify(newPlayers));
   };
 
   render() {

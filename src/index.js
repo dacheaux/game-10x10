@@ -10,7 +10,7 @@ import App from './App';
 import reducers from './reducers';
 import registerServiceWorker from './registerServiceWorker';
 
-const store = createStore(reducers, {}, applyMiddleware(thunk, logger));
+export const store = createStore(reducers, {}, applyMiddleware(thunk, logger));
 
 ReactDOM.render(
   <Provider store={store}>

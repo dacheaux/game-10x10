@@ -1,5 +1,10 @@
 export function fillArrayWithIndex(num) {
-  return (''+Array(num)).split(',').map(function(){return this[0]++;}, [0])
+  return ('' + Array(num)).split(',').map(
+    function() {
+      return this[0]++;
+    },
+    [0]
+  );
 }
 
 export function fetchPlayer(playerName) {
@@ -53,58 +58,122 @@ export function searchForArray(haystack, needle) {
   return -1;
 }
 
-export function genNextSquare(current, levelSquares, n = 0, allGenerated = [], candidate = 0) {
-  if(current && n === 97) {
-    return allGenerated[0];
-  } else {
-    let linkedSquares = [].concat(
-      genHorizontalSquares(current),
-      genVerticalSquares(current),
-      genDiagonalSquares(current)
-    );
-    linkedSquares = linkedSquares.filter(s => {
-      return !(searchForArray(levelSquares, s) > -1);
-    });
-    // candidate = Math.floor(Math.random() * candidatesArray.length)
-    if (linkedSquares.length) {
-      candidate = Math.floor(Math.random() * linkedSquares.length)
-      ++n;
-      current = linkedSquares[candidate]; 
-      allGenerated.push(current);
-    } else {
-      console.log('else statement, allGenerated is %s | current is %s', JSON.stringify(allGenerated), JSON.stringify(current));
-      return null;
-      // allGenerated.pop()
-      // --n;
-      // current = allGenerated[allGenerated.length - 1]
-      // candidate = Math.floor(Math.random() * linkedSquares.length)
-      // current = allGenerated[n]
-    }
-    return genNextSquare(current, levelSquares, n, allGenerated, candidate)
+export function unshiftSquare(quadrant, square) {
+  const sq = JSON.parse(JSON.stringify(square));
+  switch (quadrant) {
+    case 2:
+      sq[0] = sq[0] - 5;
+      return sq;
+    case 3:
+      sq[1] = sq[1] - 5;
+      return sq;
+    case 4:
+      sq[0] = sq[0] - 5;
+      sq[1] = sq[1] - 5;
+      return sq;
+    default:
+      return sq;
   }
 }
 
-export function genHorizontalSquares(current) {
+export function shiftSquare(quadrant, square) {
+  const shiftSq = JSON.parse(JSON.stringify(square));
+  switch (quadrant) {
+    case 2:
+      shiftSq[0] = shiftSq[0] + 5;
+      return shiftSq;
+    case 3:
+      shiftSq[1] = shiftSq[1] + 5;
+      return shiftSq;
+    case 4:
+      shiftSq[0] = shiftSq[0] + 5;
+      shiftSq[1] = shiftSq[1] + 5;
+      return shiftSq;
+    default:
+      return shiftSq;
+  }
+}
+
+export function currentQuadrant(square) {
+  const [x, y] = square;
+  if (x <= 5 && y <= 5) return 1;
+  if (x > 5 && y <= 5) return 2;
+  if (x <= 5 && y > 5) return 3;
+  if (x > 5 && y > 5) return 4;
+}
+
+export function addSquareToLevel(
+  nextSquare,
+  current,
+  levelSquares,
+  levelFull,
+  levelSquaresWithOpts,
+  quadrant
+) {
+  console.log(arguments);
+  let random = 0,
+    currentOpts = [];
+  if (!nextSquare) {
+    levelSquares.pop();
+    levelFull.pop();
+    while (!levelSquaresWithOpts[levelSquaresWithOpts.length - 1].length) {
+      levelSquaresWithOpts.pop();
+      levelSquares.pop();
+      levelFull.pop();
+    }
+    currentOpts = levelSquaresWithOpts[levelSquaresWithOpts.length - 1];
+    random = Math.floor(Math.random() * currentOpts.length);
+    current = currentOpts[random];
+    levelSquares.push(JSON.parse(JSON.stringify(current)));
+    currentOpts.splice(random, 1);
+    levelSquaresWithOpts.pop();
+    levelSquaresWithOpts.push(currentOpts);
+    levelFull.push(shiftSquare(quadrant, current));
+  } else {
+    random = Math.floor(Math.random() * nextSquare.length);
+    current = nextSquare[random];
+    levelSquares.push(JSON.parse(JSON.stringify(current)));
+    nextSquare.splice(random, 1);
+    levelSquaresWithOpts.push(nextSquare);
+    levelFull.push(shiftSquare(quadrant, current));
+  }
+  return { current, levelSquares, levelFull, levelSquaresWithOpts }
+}
+
+export function genNextSquare(current, levelSquares, coef) {
+  let linkedSquares = [].concat(
+    genHorizontalSquares(current, coef),
+    genVerticalSquares(current, coef),
+    genDiagonalSquares(current, coef)
+  );
+  linkedSquares = linkedSquares.filter(s => {
+    return !(searchForArray(levelSquares, s) > -1);
+  });
+  if (!linkedSquares.length) return null;
+  return linkedSquares;
+}
+
+export function genHorizontalSquares(current, coef) {
   let horSq = [];
   let x = current[0] + 3;
   let y = current[1];
-  if (0 < x && x < 11) horSq.push([x, y]);
+  if (0 < x && x < coef) horSq.push([x, y]);
   x = current[0] - 3;
-  if (0 < x && x < 11) horSq.push([x, y]);
+  if (0 < x && x < coef) horSq.push([x, y]);
   return horSq;
 }
 
-export function genVerticalSquares(current) {
+export function genVerticalSquares(current, coef) {
   let verSq = [];
   let x = current[0];
   let y = current[1] + 3;
-  if (0 < y && y < 11) verSq.push([x, y]);
+  if (0 < y && y < coef) verSq.push([x, y]);
   y = current[1] - 3;
-  if (0 < y && y < 11) verSq.push([x, y]);
+  if (0 < y && y < coef) verSq.push([x, y]);
   return verSq;
 }
 
-export function genDiagonalSquares(current) {
+export function genDiagonalSquares(current, coef) {
   let [x0, y0] = current;
   let diagSq = [];
   let x = x0 + 2;
@@ -117,7 +186,7 @@ export function genDiagonalSquares(current) {
   y = y0 + 2;
   diagSq.push([x, y]);
   const res = diagSq.filter(
-    s => s[0] > 0 && s[1] > 0 && (s[0] < 11 && s[1] < 11)
+    s => s[0] > 0 && s[1] > 0 && (s[0] < coef && s[1] < coef)
   );
   return res;
 }

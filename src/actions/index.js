@@ -1,5 +1,6 @@
 import * as types from './types';
 import * as utils from '../utils';
+import { store } from '../index';
 
 export const initLevel = level => {
   return {
@@ -79,35 +80,54 @@ export const nextLevel = level => dispatch => {
 };
 
 export const generateLevelSquares = (startSquare, level) => async dispatch => {
-  let levelSquares = [startSquare];
+  const numOfSquares = level + 1;
+  let quadrant = utils.currentQuadrant(startSquare);
+  let levelSquares = [utils.unshiftSquare(quadrant, startSquare)];
+  let levelFull = [startSquare];
   let nextSquare,
-    next = null,
-    current = startSquare;
-  for (let i = 0; i < level; i++) {
-    console.log(i);
-    console.log('current from actions/index.js', current);
-    nextSquare = utils.genNextSquare(current, levelSquares);
-    console.log('nextSquare', nextSquare);
-    if (!nextSquare) {
-      levelSquares.pop();
-      current = levelSquares[levelSquares.length - 1];
-    } else {
-      current = nextSquare;
-      levelSquares.push(nextSquare);
+    current = utils.unshiftSquare(quadrant, startSquare),
+    levelSquaresWithOpts = [],
+    i = 0,
+    addSquareToLevel = {},
+    changeQuodrant = false;
+  while (levelFull.length < numOfSquares && levelFull.length !== 0) {
+    changeQuodrant = !Boolean(levelSquares.length % 25);
+    if (changeQuodrant) {
+      levelSquares = [];
+      levelSquaresWithOpts = [];
+      current = utils.shiftSquare(quadrant, current);
+      nextSquare = utils.genNextSquare(current, levelFull, 11);
+      current = nextSquare[Math.floor(Math.random() * nextSquare.length)];
+      console.log('current', JSON.stringify(current));
+      quadrant = utils.currentQuadrant(current);
+      levelFull.push(JSON.parse(JSON.stringify(current)));
+      current = utils.unshiftSquare(quadrant, current);
+      levelSquares.push(JSON.parse(JSON.stringify(current)));
     }
+    nextSquare = utils.genNextSquare(current, levelSquares, 6);
+    // console.log('nextSquare', i, nextSquare);
+    addSquareToLevel = utils.addSquareToLevel(nextSquare, current, levelSquares, levelFull, levelSquaresWithOpts, quadrant)
+    current = addSquareToLevel.current;
+    levelSquares = addSquareToLevel.levelSquares;
+    levelFull = addSquareToLevel.levelFull;
+    levelSquaresWithOpts = addSquareToLevel.levelSquaresWithOpts;
+    i++;
   }
+  console.log('i', i);
+  console.log('levelFull', levelFull);
   const linkedSquares = [].concat(
-    utils.genHorizontalSquares(startSquare),
-    utils.genVerticalSquares(startSquare),
-    utils.genDiagonalSquares(startSquare)
+    utils.genHorizontalSquares(startSquare, 11),
+    utils.genVerticalSquares(startSquare, 11),
+    utils.genDiagonalSquares(startSquare, 11)
   );
   const litSquares = linkedSquares.filter(s => {
-    return utils.searchForArray(levelSquares, s) > -1;
+    return utils.searchForArray(levelFull, s) > -1;
   });
+  console.log('store', store);
   dispatch({
     type: types.GENERATE_LEVEL_SQUARES,
     payload: {
-      levelSquares,
+      levelSquares: levelFull,
       checkedSquares: [startSquare],
       litSquares,
       times: [new Date()]
@@ -126,9 +146,9 @@ export const checkSquare = (
   time
 ) => dispatch => {
   const linkedSquares = [].concat(
-    utils.genHorizontalSquares(square),
-    utils.genVerticalSquares(square),
-    utils.genDiagonalSquares(square)
+    utils.genHorizontalSquares(square, 11),
+    utils.genVerticalSquares(square, 11),
+    utils.genDiagonalSquares(square, 11)
   );
   const litSquares = linkedSquares.filter(s => {
     return (

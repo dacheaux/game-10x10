@@ -8,7 +8,6 @@ const initialState = {
     lives: 0,
     scores: {}
   },
-  bigSquaresFinished: 0,
   levelReady: false,
   level: 1,
   levelStarted: false,
@@ -26,11 +25,7 @@ export default (state = initialState, action) => {
     case types.SAVE_PLAYER:
       return Object.assign({}, state, { ...action.payload });
     case types.INIT_LEVEL:
-      let bigSquaresFinished = state.bigSquaresFinished + 0;
-      if (action.payload.levelCompleted) ++bigSquaresFinished;
-      let levelCompleted = action.payload.levelCompleted;
-      levelCompleted = bigSquaresFinished === 4 ? true : false;
-      return Object.assign({}, state, { ...action.payload }, { levelCompleted });
+      return Object.assign({}, state, { ...action.payload });
     case types.SET_MODAL:
       return Object.assign({}, state, { ...action.payload }); 
     case types.GAME_WON:

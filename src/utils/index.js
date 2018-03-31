@@ -110,7 +110,6 @@ export function addSquareToLevel(
   levelSquaresWithOpts,
   quadrant
 ) {
-  console.log(arguments);
   let random = 0,
     currentOpts = [];
   if (!nextSquare) {
@@ -137,10 +136,45 @@ export function addSquareToLevel(
     levelSquaresWithOpts.push(nextSquare);
     levelFull.push(shiftSquare(quadrant, current));
   }
-  return { current, levelSquares, levelFull, levelSquaresWithOpts }
+  return { current, levelSquares, levelFull, levelSquaresWithOpts };
+}
+
+export function checkInQuadrant(quadrant, levelSquares, levelFull) {
+  const lastSquare = levelSquares[levelSquares.length - 1];
+  const startSquare = levelSquares[0];
+  const [x, y] = lastSquare;
+  switch (quadrant) {
+    case 1:
+      if (x < 4 || y < 4) {
+        levelFull = [];
+        return [startSquare, levelFull];
+      }
+      return [lastSquare, levelFull];
+    case 2:
+      if (x > 2 || y < 4) {
+        levelFull = [];
+        return [startSquare, levelFull];
+      }
+      return [lastSquare, levelFull];
+    case 3:
+      if (x < 4 || y > 2) {
+        levelFull = [];
+        return [startSquare, levelFull];
+      }
+      return [lastSquare, levelFull];
+    case 4:
+      if (x > 2 || y > 2) {
+        levelFull = [];
+        return [startSquare, levelFull];
+      }
+      return [lastSquare, levelFull];
+    default:
+      return null;
+  }
 }
 
 export function genNextSquare(current, levelSquares, coef) {
+  console.log();
   let linkedSquares = [].concat(
     genHorizontalSquares(current, coef),
     genVerticalSquares(current, coef),

@@ -10,7 +10,7 @@ class TopScores extends Component {
     const item = parseInt(e.target.dataset.id, 10);
     this.setState(prevState => {
       return { activeDropdown: item, isActive: !prevState.isActive };
-    }, () => console.log(this.state));
+    });
   };
 
   render() {

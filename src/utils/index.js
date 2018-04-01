@@ -94,6 +94,30 @@ export function shiftSquare(quadrant, square) {
   }
 }
 
+export function shiftSquares(quadrant, arr) {
+  const shiftArr = JSON.parse(JSON.stringify(arr));
+  switch (quadrant) {
+    case 2:
+      return shiftArr.map(s => {
+        s[0] = s[0] + 5;
+        return s;
+      });
+    case 3:
+      return shiftArr.map(s => {
+        s[1] = s[1] + 5;
+        return s;
+      });
+    case 4:
+      return shiftArr.map(s => {
+        s[0] = s[0] + 5;
+        s[1] = s[1] + 5;
+        return s;
+      });
+    default:
+      return shiftArr;
+  }
+}
+
 export function currentQuadrant(square) {
   const [x, y] = square;
   if (x <= 5 && y <= 5) return 1;
@@ -106,7 +130,6 @@ export function addSquareToLevel(
   nextSquare,
   current,
   levelSquares,
-  levelFull,
   levelSquaresWithOpts,
   quadrant
 ) {
@@ -114,11 +137,9 @@ export function addSquareToLevel(
     currentOpts = [];
   if (!nextSquare) {
     levelSquares.pop();
-    levelFull.pop();
     while (!levelSquaresWithOpts[levelSquaresWithOpts.length - 1].length) {
       levelSquaresWithOpts.pop();
       levelSquares.pop();
-      levelFull.pop();
     }
     currentOpts = levelSquaresWithOpts[levelSquaresWithOpts.length - 1];
     random = Math.floor(Math.random() * currentOpts.length);
@@ -127,49 +148,34 @@ export function addSquareToLevel(
     currentOpts.splice(random, 1);
     levelSquaresWithOpts.pop();
     levelSquaresWithOpts.push(currentOpts);
-    levelFull.push(shiftSquare(quadrant, current));
   } else {
     random = Math.floor(Math.random() * nextSquare.length);
     current = nextSquare[random];
     levelSquares.push(JSON.parse(JSON.stringify(current)));
     nextSquare.splice(random, 1);
     levelSquaresWithOpts.push(nextSquare);
-    levelFull.push(shiftSquare(quadrant, current));
   }
-  return { current, levelSquares, levelFull, levelSquaresWithOpts };
+  return { next: current, levelSquares, levelSquaresWithOpts };
 }
 
-export function checkInQuadrant(quadrant, levelSquares, levelFull) {
+export function isValidQuadrant(quadrant, levelSquares) {
   const lastSquare = levelSquares[levelSquares.length - 1];
-  const startSquare = levelSquares[0];
   const [x, y] = lastSquare;
   switch (quadrant) {
     case 1:
-      if (x < 4 || y < 4) {
-        levelFull = [];
-        return [startSquare, levelFull];
-      }
-      return [lastSquare, levelFull];
+      if (x < 4 || y < 4) return false;
+      return true;
     case 2:
-      if (x > 2 || y < 4) {
-        levelFull = [];
-        return [startSquare, levelFull];
-      }
-      return [lastSquare, levelFull];
+      if (x > 2 || y < 4) return false;
+      return true;
     case 3:
-      if (x < 4 || y > 2) {
-        levelFull = [];
-        return [startSquare, levelFull];
-      }
-      return [lastSquare, levelFull];
+      if (x < 4 || y > 2) return false;
+      return true;
     case 4:
-      if (x > 2 || y > 2) {
-        levelFull = [];
-        return [startSquare, levelFull];
-      }
-      return [lastSquare, levelFull];
+      if (x > 2 || y > 2) return false;
+      return true;
     default:
-      return null;
+      return false;
   }
 }
 

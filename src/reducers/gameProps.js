@@ -2,7 +2,7 @@ import * as types from '../actions/types';
 
 const initialState = {
   players: [],
-  player: JSON.parse(localStorage.getItem('player-game-10x10')) || {
+  player: JSON.parse(localStorage.getItem('player--game-100hops')) || {
     name: '',
     level: 1,
     lives: 0,

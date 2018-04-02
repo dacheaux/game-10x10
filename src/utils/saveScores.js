@@ -45,6 +45,6 @@ export default (time, times) => {
     newPlayers.push(player);
     this.props.onWinOrLose(player, newPlayers);
   }
-  localStorage.setItem('player-game-10x10', JSON.stringify(player));
-  localStorage.setItem('players-game-10x10', JSON.stringify(newPlayers));
+  localStorage.setItem('player--game-100hops', JSON.stringify(player));
+  localStorage.setItem('players--game-100hops', JSON.stringify(newPlayers));
 };

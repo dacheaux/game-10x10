@@ -5,8 +5,8 @@ Fetches logged in player and list of all players from local storage
 @param {string} playerName
 */
 export function fetchPlayer(playerName) {
-  let player = JSON.parse(localStorage.getItem('player-game-10x10'));
-  let players = JSON.parse(localStorage.getItem('players-game-10x10')) || [];
+  let player = JSON.parse(localStorage.getItem('player--game-100hops'));
+  let players = JSON.parse(localStorage.getItem('players--game-100hops')) || [];
   const noPlayer = !Boolean(player);
   const newPlayer = {
     level: 1,
@@ -25,8 +25,8 @@ export function fetchPlayer(playerName) {
       players.push(player);
     }
   }
-  localStorage.setItem('player-game-10x10', JSON.stringify(player));
-  localStorage.setItem('players-game-10x10', JSON.stringify(players));
+  localStorage.setItem('player--game-100hops', JSON.stringify(player));
+  localStorage.setItem('players--game-100hops', JSON.stringify(players));
   return { player, players };
 }
 

@@ -29,33 +29,33 @@ export function fetchPlayer(playerName) {
 export function addSquareToLevel(
   nextSquare,
   current,
-  levelSquares,
-  levelSquaresWithOpts,
+  quodrantSquares,
+  quodrantSquaresWithOpts,
   quadrant
 ) {
   let random = 0,
     currentOpts = [];
   if (!nextSquare) {
-    levelSquares.pop();
-    while (!levelSquaresWithOpts[levelSquaresWithOpts.length - 1].length) {
-      levelSquaresWithOpts.pop();
-      levelSquares.pop();
+    quodrantSquares.pop();
+    while (!quodrantSquaresWithOpts[quodrantSquaresWithOpts.length - 1].length) {
+      quodrantSquaresWithOpts.pop();
+      quodrantSquares.pop();
     }
-    currentOpts = levelSquaresWithOpts[levelSquaresWithOpts.length - 1];
+    currentOpts = quodrantSquaresWithOpts[quodrantSquaresWithOpts.length - 1];
     random = Math.floor(Math.random() * currentOpts.length);
     current = currentOpts[random];
-    levelSquares.push(JSON.parse(JSON.stringify(current)));
+    quodrantSquares.push(JSON.parse(JSON.stringify(current)));
     currentOpts.splice(random, 1);
-    levelSquaresWithOpts.pop();
-    levelSquaresWithOpts.push(currentOpts);
+    quodrantSquaresWithOpts.pop();
+    quodrantSquaresWithOpts.push(currentOpts);
   } else {
     random = Math.floor(Math.random() * nextSquare.length);
     current = nextSquare[random];
-    levelSquares.push(JSON.parse(JSON.stringify(current)));
+    quodrantSquares.push(JSON.parse(JSON.stringify(current)));
     nextSquare.splice(random, 1);
-    levelSquaresWithOpts.push(nextSquare);
+    quodrantSquaresWithOpts.push(nextSquare);
   }
-  return { next: current, levelSquares, levelSquaresWithOpts };
+  return current;
 }
 
 export function genNextSquare(current, levelSquares, coef) {

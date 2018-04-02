@@ -83,60 +83,53 @@ export const nextLevel = level => dispatch => {
 export const generateLevelSquares = (startSquare, level) => async dispatch => {
   const numOfSquares = level + 1;
   let quadrant = helpers.currentQuadrant(startSquare);
-  let levelSquares = [helpers.unshiftSquare(quadrant, startSquare)];
-  let levelFull = [];
-  let numOfGenSquares = 0;
-  let nextSquare,
-    current = helpers.unshiftSquare(quadrant, startSquare),
-    levelSquaresWithOpts = [],
-    i = 0,
-    addSquareToLevel = {},
+  let current = helpers.unshiftSquare(quadrant, startSquare);
+  let quodrantSquares = [current];
+  let levelSquares = [],
+    numOfGenSquares = 0,
+    nextSquare,
+    quodrantSquaresWithOpts = [],
     changeQuodrant = false;
-  while (numOfGenSquares + levelSquares.length < numOfSquares) {
-    if (!Boolean(levelSquares.length % 25)) {
-      const isValidQuadrant = helpers.isValidQuadrant(quadrant, levelSquares)
+  while (numOfGenSquares + quodrantSquares.length < numOfSquares) {
+    if (!Boolean(quodrantSquares.length % 25)) {
+      const isValidQuadrant = helpers.isValidQuadrant(quadrant, quodrantSquares)
       if (!isValidQuadrant) {
-        current = levelSquares[0]
-        levelSquares = [current]
-        levelSquaresWithOpts = []
+        current = quodrantSquares[0]
+        quodrantSquares = [current]
+        quodrantSquaresWithOpts = []
       } else {
         numOfGenSquares = numOfGenSquares + 25;
-        levelFull = levelFull.concat(helpers.shiftSquares(quadrant, levelSquares))
-        levelSquares = [];
-        levelSquaresWithOpts = [];
+        levelSquares = levelSquares.concat(helpers.shiftSquares(quadrant, quodrantSquares))
       }
     }
-    changeQuodrant = !Boolean(levelSquares.length % 25);
+    changeQuodrant = !Boolean(quodrantSquares.length % 25);
     if (changeQuodrant) {
-      levelSquares = [];
-      levelSquaresWithOpts = [];
+      quodrantSquares = [];
+      quodrantSquaresWithOpts = [];
       current = helpers.shiftSquare(quadrant, current);
-      nextSquare = utils.genNextSquare(current, levelFull, 11);
+      nextSquare = utils.genNextSquare(current, levelSquares, 11);
       current = nextSquare[Math.floor(Math.random() * nextSquare.length)];
       quadrant = helpers.currentQuadrant(current);
       current = helpers.unshiftSquare(quadrant, current);
-      levelSquares.push(JSON.parse(JSON.stringify(current)));
-      if (!((numOfSquares - 1) % 25)) {++numOfGenSquares; continue};
+      quodrantSquares.push(JSON.parse(JSON.stringify(current)));
+      continue;
     }
-    nextSquare = utils.genNextSquare(current, levelSquares, 6);
-    addSquareToLevel = utils.addSquareToLevel(nextSquare, current, levelSquares, levelSquaresWithOpts, quadrant)
-    current = addSquareToLevel.next;
-    levelSquares = addSquareToLevel.levelSquares;
-    levelSquaresWithOpts = addSquareToLevel.levelSquaresWithOpts;
+    nextSquare = utils.genNextSquare(current, quodrantSquares, 6);
+    current = utils.addSquareToLevel(nextSquare, current, quodrantSquares, quodrantSquaresWithOpts, quadrant)
   }
-  levelFull = levelFull.concat(helpers.shiftSquares(quadrant, levelSquares))
+  levelSquares = levelSquares.concat(helpers.shiftSquares(quadrant, quodrantSquares))
   const linkedSquares = [].concat(
     utils.genHorizontalSquares(startSquare, 11),
     utils.genVerticalSquares(startSquare, 11),
     utils.genDiagonalSquares(startSquare, 11)
   );
   const litSquares = linkedSquares.filter(s => {
-    return helpers.searchForArray(levelFull, s) > -1;
+    return helpers.searchForArray(levelSquares, s) > -1;
   });
   dispatch({
     type: types.GENERATE_LEVEL_SQUARES,
     payload: {
-      levelSquares: levelFull,
+      levelSquares,
       checkedSquares: [startSquare],
       litSquares,
       times: [new Date()]

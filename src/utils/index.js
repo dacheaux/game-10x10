@@ -1,5 +1,9 @@
 import * as helpers from './helpers';
 
+/**
+Fetches logged in player and list of all players from local storage
+@param {string} playerName
+*/
 export function fetchPlayer(playerName) {
   let player = JSON.parse(localStorage.getItem('player-game-10x10'));
   let players = JSON.parse(localStorage.getItem('players-game-10x10')) || [];
@@ -26,16 +30,24 @@ export function fetchPlayer(playerName) {
   return { player, players };
 }
 
+/**
+Finds next square to generate from array of possible squares
+@param {array} possibleSquares
+@param {array} quodrantSquares
+@param {array} quodrantSquaresWithOpts
+@param {number} quadrant
+@return {array} next generated square
+*/
 export function addSquareToLevel(
-  nextSquare,
-  current,
+  possibleSquares,
   quodrantSquares,
   quodrantSquaresWithOpts,
   quadrant
 ) {
   let random = 0,
-    currentOpts = [];
-  if (!nextSquare) {
+    currentOpts = [],
+    current = null;
+  if (!possibleSquares) {
     quodrantSquares.pop();
     while (!quodrantSquaresWithOpts[quodrantSquaresWithOpts.length - 1].length) {
       quodrantSquaresWithOpts.pop();
@@ -49,16 +61,23 @@ export function addSquareToLevel(
     quodrantSquaresWithOpts.pop();
     quodrantSquaresWithOpts.push(currentOpts);
   } else {
-    random = Math.floor(Math.random() * nextSquare.length);
-    current = nextSquare[random];
+    random = Math.floor(Math.random() * possibleSquares.length);
+    current = possibleSquares[random];
     quodrantSquares.push(JSON.parse(JSON.stringify(current)));
-    nextSquare.splice(random, 1);
-    quodrantSquaresWithOpts.push(nextSquare);
+    possibleSquares.splice(random, 1);
+    quodrantSquaresWithOpts.push(possibleSquares);
   }
   return current;
 }
 
-export function genNextSquare(current, levelSquares, coef) {
+/**
+Generates possible squares from current square
+@param {array} current - current square
+@param {array} levelSquares
+@param {number} coef - number which constrains the position of square
+@return {array} all posible squares
+*/
+export function genPossibleSquares(current, levelSquares, coef) {
   let linkedSquares = [].concat(
     genHorizontalSquares(current, coef),
     genVerticalSquares(current, coef),
@@ -71,6 +90,12 @@ export function genNextSquare(current, levelSquares, coef) {
   return linkedSquares;
 }
 
+/**
+Generates possible horizontal squares from current square
+@param {array} current - current square
+@param {number} coef - number which constrains the position of square
+@return {array} array of squares two fields away from current square in horizontal direction
+*/
 export function genHorizontalSquares(current, coef) {
   let horSq = [];
   let x = current[0] + 3;
@@ -81,6 +106,12 @@ export function genHorizontalSquares(current, coef) {
   return horSq;
 }
 
+/**
+Generates possible vertical squares from current square
+@param {array} current - current square
+@param {number} coef - number which constrains the position of square
+@return {array} array of squares two fields away from current square in vertical direction
+*/
 export function genVerticalSquares(current, coef) {
   let verSq = [];
   let x = current[0];
@@ -91,6 +122,12 @@ export function genVerticalSquares(current, coef) {
   return verSq;
 }
 
+/**
+Generates possible diagonal squares from current square
+@param {array} current - current square
+@param {number} coef - number which constrains the position of square
+@return {array} array of squares one field away from current square in diagonal direction
+*/
 export function genDiagonalSquares(current, coef) {
   let [x0, y0] = current;
   let diagSq = [];

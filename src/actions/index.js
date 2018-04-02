@@ -1,7 +1,6 @@
 import * as types from './types';
 import * as utils from '../utils';
 import * as helpers from '../utils/helpers';
-import { store } from '../index';
 
 export const initLevel = level => {
   return {
@@ -87,7 +86,7 @@ export const generateLevelSquares = (startSquare, level) => async dispatch => {
   let quodrantSquares = [current];
   let levelSquares = [],
     numOfGenSquares = 0,
-    nextSquare,
+    possibleSquares = null,
     quodrantSquaresWithOpts = [],
     changeQuodrant = false;
   while (numOfGenSquares + quodrantSquares.length < numOfSquares) {
@@ -107,15 +106,15 @@ export const generateLevelSquares = (startSquare, level) => async dispatch => {
       quodrantSquares = [];
       quodrantSquaresWithOpts = [];
       current = helpers.shiftSquare(quadrant, current);
-      nextSquare = utils.genNextSquare(current, levelSquares, 11);
-      current = nextSquare[Math.floor(Math.random() * nextSquare.length)];
+      possibleSquares = utils.genPossibleSquares(current, levelSquares, 11);
+      current = possibleSquares[Math.floor(Math.random() * possibleSquares.length)];
       quadrant = helpers.currentQuadrant(current);
       current = helpers.unshiftSquare(quadrant, current);
       quodrantSquares.push(JSON.parse(JSON.stringify(current)));
       continue;
     }
-    nextSquare = utils.genNextSquare(current, quodrantSquares, 6);
-    current = utils.addSquareToLevel(nextSquare, current, quodrantSquares, quodrantSquaresWithOpts, quadrant)
+    possibleSquares = utils.genPossibleSquares(current, quodrantSquares, 6);
+    current = utils.addSquareToLevel(possibleSquares, quodrantSquares, quodrantSquaresWithOpts, quadrant)
   }
   levelSquares = levelSquares.concat(helpers.shiftSquares(quadrant, quodrantSquares))
   const linkedSquares = [].concat(

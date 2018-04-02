@@ -1,5 +1,8 @@
 /**
 Check if superset array contains a subset array
+@param {array} superset
+@param {array} subset
+@return {boolean}
 */
 export function isContainedIn(superset, subset) {
   superset = JSON.stringify(superset);
@@ -13,9 +16,9 @@ export function isContainedIn(superset, subset) {
 
 /**
 Finds the index of a subset array inside of a superset array
-@param haystack {array} - superset array
-@param needle {array} - subset array
-@returns {number}
+@param {array} haystack - superset array
+@param {array} needle - subset array
+@return {number}
 */
 export function searchForArray(haystack, needle) {
   let i, j, current;
@@ -31,8 +34,9 @@ export function searchForArray(haystack, needle) {
 
 /**
 Unshifts the square from its proper quadrant
-@param quadrant {number}
-@param square {array}
+@param {number} quadrant
+@param {array} square
+@return {array} unshifted square
 */
 export function unshiftSquare(quadrant, square) {
   const unshiftSquare = JSON.parse(JSON.stringify(square));
@@ -54,8 +58,9 @@ export function unshiftSquare(quadrant, square) {
 
 /**
 Shifts the square to its proper quadrant
-@param quadrant {number}
-@param square {array}
+@param {number} quadrant
+@param {array} square
+@return {array} shifted square
 */
 export function shiftSquare(quadrant, square) {
   const shiftSquare = JSON.parse(JSON.stringify(square));
@@ -77,8 +82,9 @@ export function shiftSquare(quadrant, square) {
 
 /**
 Shifts all squares from an array of squares to its proper quadrant
-@param quadrant {number}
-@param arr {array}
+@param {number} quadrant
+@param {array} arr
+@return {array} shifted squares
 */
 export function shiftSquares(quadrant, arr) {
   const shiftArr = JSON.parse(JSON.stringify(arr));
@@ -105,7 +111,9 @@ export function shiftSquares(quadrant, arr) {
 }
 
 /**
-Checks the current quadrant in which squares are generated 
+Checks the current quadrant in which squares are generated
+@param {array} square
+@return {number} current quadrant
 */
 export function currentQuadrant(square) {
   const [x, y] = square;
@@ -117,11 +125,12 @@ export function currentQuadrant(square) {
 
 /**
 Checks if this quadrant can be continued with subsequent squares
-@param quadrant {number}
-@param levelSquares {array}
+@param {number} quadrant
+@param {array} quodrantSquares
+@return {boolean}
 */
-export function isValidQuadrant(quadrant, levelSquares) {
-  const lastSquare = levelSquares[levelSquares.length - 1];
+export function isValidQuadrant(quadrant, quodrantSquares) {
+  const lastSquare = quodrantSquares[quodrantSquares.length - 1];
   const [x, y] = lastSquare;
   switch (quadrant) {
     case 1:

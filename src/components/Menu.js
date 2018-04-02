@@ -51,8 +51,8 @@ class Menu extends Component {
                 className="form-control col-4 p-1"
                 id="level"
                 component="input"
-                min="1"
-                max={player.level}
+                min={1}
+                max={99}
               />
             </div>
             <button type="submit" className="btn btn-dark btn-sm">

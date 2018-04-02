@@ -1,11 +1,4 @@
-export function fillArrayWithIndex(num) {
-  return ('' + Array(num)).split(',').map(
-    function() {
-      return this[0]++;
-    },
-    [0]
-  );
-}
+import * as helpers from './helpers';
 
 export function fetchPlayer(playerName) {
   let player = JSON.parse(localStorage.getItem('player-game-10x10'));
@@ -31,99 +24,6 @@ export function fetchPlayer(playerName) {
   localStorage.setItem('player-game-10x10', JSON.stringify(player));
   localStorage.setItem('players-game-10x10', JSON.stringify(players));
   return { player, players };
-}
-
-export function isContainedIn(superset, subset) {
-  superset = JSON.stringify(superset);
-  subset = JSON.stringify(subset);
-
-  const index = superset.indexOf(subset);
-  if (index !== -1) {
-    return true;
-  }
-}
-
-/**
-
-*/
-export function searchForArray(haystack, needle) {
-  let i, j, current;
-  for (i = 0; i < haystack.length; ++i) {
-    if (needle.length === haystack[i].length) {
-      current = haystack[i];
-      for (j = 0; j < needle.length && needle[j] === current[j]; ++j);
-      if (j === needle.length) return i;
-    }
-  }
-  return -1;
-}
-
-export function unshiftSquare(quadrant, square) {
-  const sq = JSON.parse(JSON.stringify(square));
-  switch (quadrant) {
-    case 2:
-      sq[0] = sq[0] - 5;
-      return sq;
-    case 3:
-      sq[1] = sq[1] - 5;
-      return sq;
-    case 4:
-      sq[0] = sq[0] - 5;
-      sq[1] = sq[1] - 5;
-      return sq;
-    default:
-      return sq;
-  }
-}
-
-export function shiftSquare(quadrant, square) {
-  const shiftSq = JSON.parse(JSON.stringify(square));
-  switch (quadrant) {
-    case 2:
-      shiftSq[0] = shiftSq[0] + 5;
-      return shiftSq;
-    case 3:
-      shiftSq[1] = shiftSq[1] + 5;
-      return shiftSq;
-    case 4:
-      shiftSq[0] = shiftSq[0] + 5;
-      shiftSq[1] = shiftSq[1] + 5;
-      return shiftSq;
-    default:
-      return shiftSq;
-  }
-}
-
-export function shiftSquares(quadrant, arr) {
-  const shiftArr = JSON.parse(JSON.stringify(arr));
-  switch (quadrant) {
-    case 2:
-      return shiftArr.map(s => {
-        s[0] = s[0] + 5;
-        return s;
-      });
-    case 3:
-      return shiftArr.map(s => {
-        s[1] = s[1] + 5;
-        return s;
-      });
-    case 4:
-      return shiftArr.map(s => {
-        s[0] = s[0] + 5;
-        s[1] = s[1] + 5;
-        return s;
-      });
-    default:
-      return shiftArr;
-  }
-}
-
-export function currentQuadrant(square) {
-  const [x, y] = square;
-  if (x <= 5 && y <= 5) return 1;
-  if (x > 5 && y <= 5) return 2;
-  if (x <= 5 && y > 5) return 3;
-  if (x > 5 && y > 5) return 4;
 }
 
 export function addSquareToLevel(
@@ -158,36 +58,14 @@ export function addSquareToLevel(
   return { next: current, levelSquares, levelSquaresWithOpts };
 }
 
-export function isValidQuadrant(quadrant, levelSquares) {
-  const lastSquare = levelSquares[levelSquares.length - 1];
-  const [x, y] = lastSquare;
-  switch (quadrant) {
-    case 1:
-      if (x < 4 || y < 4) return false;
-      return true;
-    case 2:
-      if (x > 2 || y < 4) return false;
-      return true;
-    case 3:
-      if (x < 4 || y > 2) return false;
-      return true;
-    case 4:
-      if (x > 2 || y > 2) return false;
-      return true;
-    default:
-      return false;
-  }
-}
-
 export function genNextSquare(current, levelSquares, coef) {
-  console.log();
   let linkedSquares = [].concat(
     genHorizontalSquares(current, coef),
     genVerticalSquares(current, coef),
     genDiagonalSquares(current, coef)
   );
   linkedSquares = linkedSquares.filter(s => {
-    return !(searchForArray(levelSquares, s) > -1);
+    return !(helpers.searchForArray(levelSquares, s) > -1);
   });
   if (!linkedSquares.length) return null;
   return linkedSquares;
@@ -229,8 +107,4 @@ export function genDiagonalSquares(current, coef) {
     s => s[0] > 0 && s[1] > 0 && (s[0] < coef && s[1] < coef)
   );
   return res;
-}
-
-export function genRandomNum(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
 }

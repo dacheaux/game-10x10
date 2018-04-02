@@ -13,20 +13,29 @@ import './App.css';
 class App extends Component {
   state = { showTopScores: false };
 
+  componentWillReceiveProps(nextProps) {
+    const {
+      levelStarted,
+      levelCompleted,
+      level,
+      isChoosePlayerOpen
+    } = this.props.gameProps;
+    const next = nextProps.gameProps;
+    if (next.levelCompleted && next.levelCompleted !== levelCompleted)
+      return this.props.setModal(true, level);
+    if (
+      !next.levelStarted &&
+      next.levelStarted !== levelStarted &&
+      !isChoosePlayerOpen
+    )
+      this.props.setModal(false, level);
+  }
+
   onShowTopScores = () => {
     this.setState(prevState => {
       return { showTopScores: !prevState.showTopScores };
     });
   };
-
-  componentWillReceiveProps(nextProps) {
-    const { levelStarted, levelCompleted, level, isChoosePlayerOpen } = this.props.gameProps;
-    const next = nextProps.gameProps;
-    if (next.levelCompleted && next.levelCompleted !== levelCompleted)
-      return this.props.setModal(true, level);
-    if (!next.levelStarted && next.levelStarted !== levelStarted && !isChoosePlayerOpen)
-      this.props.setModal(false, level);
-  }
 
   onYesOrNo = isYes => {
     let { level, levelCompleted } = this.props.gameProps;
@@ -51,7 +60,11 @@ class App extends Component {
       'low-z-index': isChoosePlayerOpen
     });
     const gameInfo =
-      levelReady && !this.state.showTopScores ? <span className="text-danger">Click on a square to begin</span> : '';
+      levelReady && !this.state.showTopScores ? (
+        <span className="text-danger">Click on a square to begin</span>
+      ) : (
+        ''
+      );
     return (
       <div className="container-fluid">
         <div className="row">

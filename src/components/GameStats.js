@@ -15,7 +15,7 @@ class GameStats extends Component {
     }
     if (next.levelCompleted && next.levelCompleted !== levelCompleted) {
       clearInterval(this.tickInterval);
-      saveScores(this.state.timer, nextProps.gameLogic.times);
+      saveScores(this.state.timer, nextProps.gameLogic.times, this.props.gameProps, this.props.gameLogic);
     } else if (!next.levelStarted && next.levelStarted !== levelStarted) {
       clearInterval(this.tickInterval);
       saveScores(null);

@@ -3,9 +3,12 @@
 @param time {number} - full time for this level
 @param times {array} - times between two clicks
 */
-export default (time, times) => {
-  const { level, player, players } = this.props.gameProps;
-  const { levelSquares, checkedSquares } = this.props.gameLogic;
+import { store } from '../index';
+import { onWinOrLose } from '../actions';
+
+export default (time, times, gameProps, gameLogic) => {
+  const { level, player, players } = gameProps;
+  const { levelSquares, checkedSquares } = gameLogic;
   const { scores } = player;
 
   const newPlayers = players.filter(item => item.name !== player.name);
@@ -37,13 +40,13 @@ export default (time, times) => {
     if (player.level > 99) player.level = 99;
     ++player.lives;
     newPlayers.push(player);
-    this.props.onWinOrLose(player, newPlayers);
+    store.dispatch(onWinOrLose(player, newPlayers));
     player.scores[`level${level}`] = levelScores;
   } else {
     player.lives = player.lives - (levelSquares.length - checkedSquares.length);
     if (player.lives < 0) player.lives = 0;
     newPlayers.push(player);
-    this.props.onWinOrLose(player, newPlayers);
+    store.dispatch(onWinOrLose(player, newPlayers));
   }
   localStorage.setItem('player--game-100hops', JSON.stringify(player));
   localStorage.setItem('players--game-100hops', JSON.stringify(newPlayers));

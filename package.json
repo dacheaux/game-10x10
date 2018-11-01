@@ -8,13 +8,13 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "lodash": "^4.17.10",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
-    "react-measure": "^2.1.0",
-    "react-redux": "^5.0.7",
-    "react-scripts": "^1.1.5",
-    "react-transition-group": "^2.4.0",
+    "lodash": "^4.17.11",
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
+    "react-measure": "^2.1.2",
+    "react-redux": "^5.1.0",
+    "react-scripts": "^2.1.1",
+    "react-transition-group": "^2.5.0",
     "redux": "^3.7.2",
     "redux-form": "^7.4.2",
     "redux-logger": "^3.0.6",
@@ -26,5 +26,11 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
